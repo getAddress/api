@@ -7,7 +7,7 @@ export class Suggestion{
 }
 
 export class Failed{
-    isSuccess: boolean = true;
+    isSuccess: boolean = false;
     constructor(readonly status:number, readonly message:string){
 
     }
