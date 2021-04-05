@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESM</title>
+  
+</head>
+<body>
+    <script type="module" >
+        import API from "../dist/getaddress-api-es.js";
+        import getApiKey from "../src/api-key.es.js";
+
+        const api = new API(getApiKey());
+
+        const logSuggestions = async function (){
+            try
+            {
+                const response = await api.autocomplete.suggestions('PE15 0SR');
+       
+                console.log(response);
+            }
+            catch(err){
+                console.log(err.message);
+            }
+            
+        };
+
+        logSuggestions();
+
+    </script>
+</body>
+</html>
