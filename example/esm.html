@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESM</title>
+  
+</head>
+<body>
+    <script type="module" >
+        import {API} from "../dist/getaddress-api-es.js";
+        import getApiKey from "../api-key.es.js";
+
+        const api = new API(getApiKey());
+
+        const logSuggestions = async function (){
+           
+            const response = await api.find('XX4 29X');
+            if(response.isSuccess){
+                console.log(response);
+            }
+        };
+
+        logSuggestions();
+
+    </script>
+</body>
+</html>
