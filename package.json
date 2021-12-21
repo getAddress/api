@@ -2,15 +2,17 @@
   "name": "getaddress-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/getaddress-api-cjs.js",
-  "module": "dist/getaddress-api-es.js",
+  "main": "src/API.js",
+  "type": "module",
+  "types": "./@types/*.d.ts",
   "scripts": {
-    "test": "mocha",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c",
     "cleanDist": "rimraf dist/*",
     "cleanSrc": "rimraf src/*",
+    "cleanTypes": "rimraf @types/*",
     "compile": "tsc --build tsconfig.json",
     "rollup": "rollup -c",
-    "build": "npm-run-all cleanDist cleanSrc compile rollup test",
+    "build": "npm-run-all cleanDist cleanSrc cleanTypes compile rollup test",
     "serve": "serve",
     "prepublishOnly": "npm test"
   },
@@ -22,12 +24,37 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
-    "mocha": "^8.3.2",
+    "@types/jest": "^27.0.3",
+    "jest": "^27.4.5",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.42.3",
     "rollup-plugin-terser": "^7.0.2",
     "serve": "^11.3.2",
-    "typescript": "^4.2.3"
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(t|j)sx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "extensionsToTreatAsEsm": [".ts"],
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    }
+  },
+  "dependencies": {
+    "node-fetch": "^3.1.0"
   }
 }
