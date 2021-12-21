@@ -34,19 +34,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { Failed } from "./types";
+import { Failed, Success } from "./Types";
+import fetch from "node-fetch";
 var API = /** @class */ (function () {
     function API(api_key) {
         this.api_key = api_key;
     }
     API.prototype.autocomplete = function (query) {
         return __awaiter(this, void 0, void 0, function () {
-            var response, json, json, err_1;
+            var response, json_1, suggestions, json, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 5, , 6]);
-                        return [4 /*yield*/, fetch("https://api.getaddress.io/autocomplete/" + query + "?api-key=" + this.api_key, {
+                        return [4 /*yield*/, fetch("https://api.getaddress.io/autocomplete/".concat(query, "?api-key=").concat(this.api_key), {
                                 method: 'post',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -60,42 +61,19 @@ var API = /** @class */ (function () {
                         if (!(response.status == 200)) return [3 /*break*/, 3];
                         return [4 /*yield*/, response.json()];
                     case 2:
-                        json = _a.sent();
-                        return [2 /*return*/, json];
+                        json_1 = _a.sent();
+                        suggestions = json_1;
+                        return [2 /*return*/, new Success(suggestions)];
                     case 3: return [4 /*yield*/, response.json()];
                     case 4:
                         json = _a.sent();
                         return [2 /*return*/, json];
                     case 5:
                         err_1 = _a.sent();
-                        return [2 /*return*/, new Failed(401, err_1.message)];
-                    case 6: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    API.prototype.find = function (query) {
-        return __awaiter(this, void 0, void 0, function () {
-            var response, json, json, err_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 5, , 6]);
-                        return [4 /*yield*/, fetch("https://api.getaddress.io/find/" + query + "?api-key=" + this.api_key + "&expand=true")];
-                    case 1:
-                        response = _a.sent();
-                        if (!(response.status == 200)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, response.json()];
-                    case 2:
-                        json = _a.sent();
-                        return [2 /*return*/, json];
-                    case 3: return [4 /*yield*/, response.json()];
-                    case 4:
-                        json = _a.sent();
-                        return [2 /*return*/, new Failed(response.status, json.Message)];
-                    case 5:
-                        err_2 = _a.sent();
-                        return [2 /*return*/, new Failed(401, err_2.message)];
+                        if (err_1 instanceof Error) {
+                            return [2 /*return*/, new Failed(401, err_1.message)];
+                        }
+                        return [2 /*return*/, new Failed(401, 'Unauthorised')];
                     case 6: return [2 /*return*/];
                 }
             });
