@@ -17,7 +17,7 @@
     "prepublishOnly": "npm test"
   },
   "keywords": [
-    "getaddress.io"
+    "getaddress.io postcode getaddress getaddress()"
   ],
   "author": "Lee Smith",
   "license": "MIT",
