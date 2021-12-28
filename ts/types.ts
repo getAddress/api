@@ -6,26 +6,28 @@ export class Suggestion
     }
 }
 
-export abstract class Result<T>
+export abstract class Result<S,F>
 {
     constructor(readonly isSuccess:boolean){
         
     }
 
-    abstract toSuccess():T;
+    abstract toSuccess():S;
+    abstract toFailed():F;
 }
 
-export abstract class Success<T> extends Result<T>
+export abstract class Success<S,F> extends Result<S,F>
 {
     constructor()
     {
         super(true);
     }
 
-    abstract toSuccess():T;
+    abstract toSuccess():S;
+    abstract toFailed():F;
 }
 
-export class AutocompleteSuccess extends Success<AutocompleteSuccess>
+export class AutocompleteSuccess extends Success<AutocompleteSuccess,AutocompleteFailed>
 {
     constructor(readonly suggestions:Suggestion[])
     {
@@ -35,9 +37,12 @@ export class AutocompleteSuccess extends Success<AutocompleteSuccess>
     toSuccess(): AutocompleteSuccess {
         return this;
     }
+    toFailed(): AutocompleteFailed {
+        throw new Error('Did not fail');
+    }
 }
 
-export class GetSuccess extends Success<GetSuccess>
+export class GetSuccess extends Success<GetSuccess, GetFailed>
 {
     constructor(readonly address:AutocompleteAddress)
     {
@@ -47,9 +52,12 @@ export class GetSuccess extends Success<GetSuccess>
     toSuccess(): GetSuccess {
         return this;
     }
+    toFailed(): GetFailed {
+        throw new Error('Did not fail');
+    }
 }
 
-export class FindSuccess extends Success<FindSuccess>
+export class FindSuccess extends Success<FindSuccess,FindFailed>
 {
     constructor(readonly addresses:FindAddresses)
     {
@@ -59,9 +67,12 @@ export class FindSuccess extends Success<FindSuccess>
     toSuccess(): FindSuccess {
         return this;
     }
+    toFailed(): FindFailed {
+        throw new Error('Did not fail');
+    }
 }
 
-export class FindFailed extends Result<FindSuccess>
+export class FindFailed extends Result<FindSuccess,FindFailed>
 {
     constructor(readonly status:number, readonly message:string)
     {
@@ -71,9 +82,12 @@ export class FindFailed extends Result<FindSuccess>
     toSuccess(): FindSuccess {
         throw new Error('Not a success');
     }
+    toFailed(): FindFailed {
+        return this;
+    }
 }
 
-export class AutocompleteFailed extends Result<AutocompleteSuccess>
+export class AutocompleteFailed extends Result<AutocompleteSuccess,AutocompleteFailed>
 {
     constructor(readonly status:number, readonly message:string)
     {
@@ -83,9 +97,12 @@ export class AutocompleteFailed extends Result<AutocompleteSuccess>
     toSuccess(): AutocompleteSuccess {
         throw new Error('Not a success');
     }
+    toFailed(): AutocompleteFailed {
+        return this;
+    }
 }
 
-export class GetFailed extends Result<GetSuccess>
+export class GetFailed extends Result<GetSuccess,GetFailed>
 {
     constructor(readonly status:number, readonly message:string)
     {
@@ -94,6 +111,9 @@ export class GetFailed extends Result<GetSuccess>
 
     toSuccess(): GetSuccess {
         throw new Error('Not a success');
+    }
+    toFailed(): GetFailed {
+        return this;
     }
 }
 

@@ -23,6 +23,9 @@ export class AutocompleteSuccess extends Success {
     toSuccess() {
         return this;
     }
+    toFailed() {
+        throw new Error('Did not fail');
+    }
 }
 export class GetSuccess extends Success {
     constructor(address) {
@@ -32,6 +35,9 @@ export class GetSuccess extends Success {
     toSuccess() {
         return this;
     }
+    toFailed() {
+        throw new Error('Did not fail');
+    }
 }
 export class FindSuccess extends Success {
     constructor(addresses) {
@@ -40,6 +46,9 @@ export class FindSuccess extends Success {
     }
     toSuccess() {
         return this;
+    }
+    toFailed() {
+        throw new Error('Did not fail');
     }
 }
 export class FindFailed extends Result {
@@ -51,6 +60,9 @@ export class FindFailed extends Result {
     toSuccess() {
         throw new Error('Not a success');
     }
+    toFailed() {
+        return this;
+    }
 }
 export class AutocompleteFailed extends Result {
     constructor(status, message) {
@@ -61,6 +73,9 @@ export class AutocompleteFailed extends Result {
     toSuccess() {
         throw new Error('Not a success');
     }
+    toFailed() {
+        return this;
+    }
 }
 export class GetFailed extends Result {
     constructor(status, message) {
@@ -70,6 +85,9 @@ export class GetFailed extends Result {
     }
     toSuccess() {
         throw new Error('Not a success');
+    }
+    toFailed() {
+        return this;
     }
 }
 export class AutocompleteOptions {

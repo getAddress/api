@@ -11,7 +11,7 @@ class API
      
     }
 
-    async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess>> 
+    async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess,AutocompleteFailed>> 
     {
         try{
             
@@ -33,8 +33,8 @@ class API
                 return new AutocompleteSuccess(suggestions);
             }
  
-            let json = await response.json();
-            return json as AutocompleteFailed;
+            const json:any = await response.json();
+            return new AutocompleteFailed(response.status,json.Message);
          }
          catch(err:unknown)
          {
@@ -47,7 +47,7 @@ class API
          }
     }
 
-    async get(id:string):Promise<Result<GetSuccess>> 
+    async get(id:string):Promise<Result<GetSuccess,GetFailed>> 
     {
         try{
             
@@ -59,8 +59,8 @@ class API
                 return new GetSuccess(address);
             }
  
-            let json = await response.json();
-            return json as GetFailed;
+            const json:any = await response.json();
+            return new GetFailed(response.status,json.Message);
          }
          catch(err:unknown)
          {
@@ -73,7 +73,7 @@ class API
          }
     }
 
-    async find(postcode:string):Promise<Result<FindSuccess>> 
+    async find(postcode:string):Promise<Result<FindSuccess,FindFailed>> 
     {
         try{
             
@@ -85,8 +85,8 @@ class API
                 return new FindSuccess(addresses);
             }
  
-            let json = await response.json();
-            return json as FindFailed;
+            const json:any = await response.json();
+            return new FindFailed(response.status,json.Message);
          }
          catch(err:unknown)
          {

@@ -22,8 +22,8 @@ class API {
                 const suggestions = json.suggestions;
                 return new AutocompleteSuccess(suggestions);
             }
-            let json = await response.json();
-            return json;
+            const json = await response.json();
+            return new AutocompleteFailed(response.status, json.Message);
         }
         catch (err) {
             if (err instanceof Error) {
@@ -40,8 +40,8 @@ class API {
                 const address = json;
                 return new GetSuccess(address);
             }
-            let json = await response.json();
-            return json;
+            const json = await response.json();
+            return new GetFailed(response.status, json.Message);
         }
         catch (err) {
             if (err instanceof Error) {
@@ -58,8 +58,8 @@ class API {
                 const addresses = json;
                 return new FindSuccess(addresses);
             }
-            let json = await response.json();
-            return json;
+            const json = await response.json();
+            return new FindFailed(response.status, json.Message);
         }
         catch (err) {
             if (err instanceof Error) {
