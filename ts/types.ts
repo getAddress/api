@@ -6,26 +6,26 @@ export class Suggestion
     }
 }
 
-export abstract class Result
+export abstract class Result<T>
 {
     constructor(readonly isSuccess:boolean){
         
     }
 
-    abstract toSuccess():Success;
+    abstract toSuccess():T;
 }
 
-export abstract class Success extends Result
+export abstract class Success<T> extends Result<T>
 {
     constructor()
     {
         super(true);
     }
 
-    abstract toSuccess():Success;
+    abstract toSuccess():T;
 }
 
-export class AutocompleteSuccess extends Success
+export class AutocompleteSuccess extends Success<AutocompleteSuccess>
 {
     constructor(readonly suggestions:Suggestion[])
     {
@@ -37,7 +37,7 @@ export class AutocompleteSuccess extends Success
     }
 }
 
-export class GetSuccess extends Success
+export class GetSuccess extends Success<GetSuccess>
 {
     constructor(readonly address:AutocompleteAddress)
     {
@@ -49,14 +49,50 @@ export class GetSuccess extends Success
     }
 }
 
-export class Failed extends Result
+export class FindSuccess extends Success<FindSuccess>
+{
+    constructor(readonly addresses:FindAddresses)
+    {
+        super();
+    }
+
+    toSuccess(): FindSuccess {
+        return this;
+    }
+}
+
+export class FindFailed extends Result<FindSuccess>
 {
     constructor(readonly status:number, readonly message:string)
     {
         super(false);
     }
 
-    toSuccess(): Success {
+    toSuccess(): FindSuccess {
+        throw new Error('Not a success');
+    }
+}
+
+export class AutocompleteFailed extends Result<AutocompleteSuccess>
+{
+    constructor(readonly status:number, readonly message:string)
+    {
+        super(false);
+    }
+
+    toSuccess(): AutocompleteSuccess {
+        throw new Error('Not a success');
+    }
+}
+
+export class GetFailed extends Result<GetSuccess>
+{
+    constructor(readonly status:number, readonly message:string)
+    {
+        super(false);
+    }
+
+    toSuccess(): GetSuccess {
         throw new Error('Not a success');
     }
 }
@@ -75,12 +111,9 @@ export class AutocompleteOptions
     }
 }
 
-export abstract class Address
+export class Address
 {
     constructor(
-        readonly postcode:string, 
-        readonly latitude:number,
-        readonly longitude:number,
         readonly formatted_address:string[],
         readonly thoroughfare:string,
         readonly building_name:string,
@@ -97,6 +130,17 @@ export abstract class Address
         readonly district:string,
         readonly country:string)
     {
+
+    }
+}
+
+export class FindAddresses
+{
+    constructor(
+        readonly postcode:string, 
+        readonly latitude:number,
+        readonly longitude:number,
+        readonly addresses:Address[]){
 
     }
 }
@@ -124,8 +168,7 @@ export class AutocompleteAddress extends Address{
         readonly country:string,
         readonly residential:boolean)
     {
-        super(postcode,latitude,longitude,
-            formatted_address,thoroughfare,
+        super(formatted_address,thoroughfare,
             building_name,building_number,
             sub_building_name,sub_building_number,
             line_1,line_2,line_3,line_3,line_4,

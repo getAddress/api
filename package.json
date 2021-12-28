@@ -5,7 +5,7 @@
   "main": "dist/getaddress-api-es.js",
   "module": "dist/getaddress-api-es.js",
   "type": "module",
-  "types": "./@types/API.d.ts",
+  "types": "./@types/getaddress-api.d.ts",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c",
     "cleanDist": "rimraf dist/*",
@@ -29,6 +29,7 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.42.3",
+    "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "serve": "^11.3.2",
     "ts-jest": "^27.1.2",

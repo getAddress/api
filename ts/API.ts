@@ -1,5 +1,5 @@
-import {Suggestion, Failed, Result,AutocompleteOptions, 
-    AutocompleteSuccess, AutocompleteAddress,GetSuccess} from "./Types"
+import {Suggestion, GetFailed,FindFailed, Result,AutocompleteOptions, 
+    AutocompleteSuccess, AutocompleteAddress,GetSuccess, FindAddresses, FindSuccess, AutocompleteFailed} from "./Types"
 import fetch from "node-fetch"
 
 
@@ -11,7 +11,7 @@ class API
      
     }
 
-    async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result> 
+    async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess>> 
     {
         try{
             
@@ -34,20 +34,20 @@ class API
             }
  
             let json = await response.json();
-            return json as Failed;
+            return json as AutocompleteFailed;
          }
          catch(err:unknown)
          {
             if(err instanceof Error)
             {
-                return new Failed(401,err.message);
+                return new AutocompleteFailed(401,err.message);
             }
 
-            return new Failed(401,'Unauthorised');
+            return new AutocompleteFailed(401,'Unauthorised');
          }
     }
 
-    async get(id:string):Promise<Result> 
+    async get(id:string):Promise<Result<GetSuccess>> 
     {
         try{
             
@@ -60,16 +60,42 @@ class API
             }
  
             let json = await response.json();
-            return json as Failed;
+            return json as GetFailed;
          }
          catch(err:unknown)
          {
             if(err instanceof Error)
             {
-                return new Failed(401,err.message);
+                return new GetFailed(401,err.message);
             }
 
-            return new Failed(401,'Unauthorised');
+            return new GetFailed(401,'Unauthorised');
+         }
+    }
+
+    async find(postcode:string):Promise<Result<FindSuccess>> 
+    {
+        try{
+            
+            const response = await fetch(`https://api.getaddress.io/find/${postcode}?api-key=${this.api_key}&expand=true`);
+    
+            if(response.status == 200){
+                const json:any = await response.json();
+                const addresses =  json as FindAddresses;
+                return new FindSuccess(addresses);
+            }
+ 
+            let json = await response.json();
+            return json as FindFailed;
+         }
+         catch(err:unknown)
+         {
+            if(err instanceof Error)
+            {
+                return new FindFailed(401,err.message);
+            }
+
+            return new FindFailed(401,'Unauthorised');
          }
     }
 }

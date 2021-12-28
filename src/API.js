@@ -1,4 +1,4 @@
-import { Failed, AutocompleteOptions, AutocompleteSuccess, GetSuccess } from "./Types";
+import { GetFailed, FindFailed, AutocompleteOptions, AutocompleteSuccess, GetSuccess, FindSuccess, AutocompleteFailed } from "./Types";
 import fetch from "node-fetch";
 class API {
     constructor(api_key) {
@@ -27,9 +27,9 @@ class API {
         }
         catch (err) {
             if (err instanceof Error) {
-                return new Failed(401, err.message);
+                return new AutocompleteFailed(401, err.message);
             }
-            return new Failed(401, 'Unauthorised');
+            return new AutocompleteFailed(401, 'Unauthorised');
         }
     }
     async get(id) {
@@ -45,9 +45,27 @@ class API {
         }
         catch (err) {
             if (err instanceof Error) {
-                return new Failed(401, err.message);
+                return new GetFailed(401, err.message);
             }
-            return new Failed(401, 'Unauthorised');
+            return new GetFailed(401, 'Unauthorised');
+        }
+    }
+    async find(postcode) {
+        try {
+            const response = await fetch(`https://api.getaddress.io/find/${postcode}?api-key=${this.api_key}&expand=true`);
+            if (response.status == 200) {
+                const json = await response.json();
+                const addresses = json;
+                return new FindSuccess(addresses);
+            }
+            let json = await response.json();
+            return json;
+        }
+        catch (err) {
+            if (err instanceof Error) {
+                return new FindFailed(401, err.message);
+            }
+            return new FindFailed(401, 'Unauthorised');
         }
     }
 }
