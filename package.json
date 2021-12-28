@@ -2,14 +2,15 @@
   "name": "getaddress-api",
   "version": "1.0.0",
   "description": "",
-  "main": "src/API.js",
+  "main": "dist/getaddress-api-es.js",
+  "module": "dist/getaddress-api-es.js",
   "type": "module",
-  "types": "./@types/*.d.ts",
+  "types": "./@types/API.d.ts",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c",
     "cleanDist": "rimraf dist/*",
     "cleanSrc": "rimraf src/*",
-    "cleanTypes": "rimraf @types/*",
+    "cleanTypes": "rimraf ./@types/*.d.ts",
     "compile": "tsc --build tsconfig.json",
     "rollup": "rollup -c",
     "build": "npm-run-all cleanDist cleanSrc cleanTypes compile rollup test",
@@ -22,7 +23,6 @@
   "author": "Lee Smith",
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@types/jest": "^27.0.3",
     "jest": "^27.4.5",
@@ -47,7 +47,9 @@
       "json",
       "node"
     ],
-    "extensionsToTreatAsEsm": [".ts"],
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
     "globals": {
       "ts-jest": {
         "useESM": true

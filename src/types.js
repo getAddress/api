@@ -1,53 +1,104 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Result = /** @class */ (function () {
-    function Result(isSuccess) {
-        this.isSuccess = isSuccess;
-    }
-    return Result;
-}());
-export { Result };
-var Success = /** @class */ (function (_super) {
-    __extends(Success, _super);
-    function Success(suggestions) {
-        var _this = _super.call(this, true) || this;
-        _this.suggestions = suggestions;
-        return _this;
-    }
-    return Success;
-}(Result));
-export { Success };
-var Suggestion = /** @class */ (function () {
-    function Suggestion(address, url, id) {
+export class Suggestion {
+    constructor(address, url, id) {
         this.address = address;
         this.url = url;
         this.id = id;
     }
-    return Suggestion;
-}());
-export { Suggestion };
-var Failed = /** @class */ (function (_super) {
-    __extends(Failed, _super);
-    function Failed(status, message) {
-        var _this = _super.call(this, false) || this;
-        _this.status = status;
-        _this.message = message;
-        return _this;
+}
+export class Result {
+    constructor(isSuccess) {
+        this.isSuccess = isSuccess;
     }
-    return Failed;
-}(Result));
-export { Failed };
+}
+export class Success extends Result {
+    constructor() {
+        super(true);
+    }
+}
+export class AutocompleteSuccess extends Success {
+    constructor(suggestions) {
+        super();
+        this.suggestions = suggestions;
+    }
+    toSuccess() {
+        return this;
+    }
+}
+export class GetSuccess extends Success {
+    constructor(address) {
+        super();
+        this.address = address;
+    }
+    toSuccess() {
+        return this;
+    }
+}
+export class Failed extends Result {
+    constructor(status, message) {
+        super(false);
+        this.status = status;
+        this.message = message;
+    }
+    toSuccess() {
+        throw new Error('Not a success');
+    }
+}
+export class AutocompleteOptions {
+    constructor() {
+        this.all = false;
+        this.template = null;
+        this.top = null;
+    }
+    static Default() {
+        let options = new AutocompleteOptions();
+        options.all = true;
+        return options;
+    }
+}
+export class Address {
+    constructor(postcode, latitude, longitude, formatted_address, thoroughfare, building_name, sub_building_name, sub_building_number, building_number, line_1, line_2, line_3, line_4, locality, town_or_city, county, district, country) {
+        this.postcode = postcode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.formatted_address = formatted_address;
+        this.thoroughfare = thoroughfare;
+        this.building_name = building_name;
+        this.sub_building_name = sub_building_name;
+        this.sub_building_number = sub_building_number;
+        this.building_number = building_number;
+        this.line_1 = line_1;
+        this.line_2 = line_2;
+        this.line_3 = line_3;
+        this.line_4 = line_4;
+        this.locality = locality;
+        this.town_or_city = town_or_city;
+        this.county = county;
+        this.district = district;
+        this.country = country;
+    }
+}
+export class AutocompleteAddress extends Address {
+    constructor(postcode, latitude, longitude, formatted_address, thoroughfare, building_name, building_number, sub_building_name, sub_building_number, line_1, line_2, line_3, line_4, locality, town_or_city, county, district, country, residential) {
+        super(postcode, latitude, longitude, formatted_address, thoroughfare, building_name, building_number, sub_building_name, sub_building_number, line_1, line_2, line_3, line_3, line_4, town_or_city, county, district, country);
+        this.postcode = postcode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.formatted_address = formatted_address;
+        this.thoroughfare = thoroughfare;
+        this.building_name = building_name;
+        this.building_number = building_number;
+        this.sub_building_name = sub_building_name;
+        this.sub_building_number = sub_building_number;
+        this.line_1 = line_1;
+        this.line_2 = line_2;
+        this.line_3 = line_3;
+        this.line_4 = line_4;
+        this.locality = locality;
+        this.town_or_city = town_or_city;
+        this.county = county;
+        this.district = district;
+        this.country = country;
+        this.residential = residential;
+    }
+}
 //# sourceMappingURL=Types.js.map
