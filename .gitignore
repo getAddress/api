@@ -1,3 +1,5 @@
 node_modules/
 dist/
 ts/test/api-key.ts
+src/
+@types/

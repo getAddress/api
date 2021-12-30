@@ -4,26 +4,19 @@ import dts from "rollup-plugin-dts";
 
 export default [
     {
-        input: "@types/API.d.ts",
+        input: "@types/GetAddressClient.d.ts",
         output: [{ file: "@types/getaddress-api.d.ts", format: "es" }],
         plugins: [dts()],
     },
     {
-        input: "src/API.js",
+        input: "src/GetAddressClient.js",
         output: {
-            file:"dist/getaddress-api-cjs.js",
-            format:"cjs"
-        }
-    },
-    {
-        input: "src/API.js",
-        output: {
-            file:"dist/getaddress-api-es.js",
+            file:"dist/getaddress-api.mjs",
             format:"es"
         }
     },
     {
-        input: "src/API.js",
+        input: "src/GetAddressClient.js",
         output: {
             file:"dist/getaddress-api-umd.js",
             format:"umd",
@@ -31,7 +24,7 @@ export default [
         }
     },
     {
-        input: "src/API.js",
+        input: "src/GetAddressClient.js",
         output: {
             file:"dist/getaddress-api-umd.min.js",
             format:"umd",

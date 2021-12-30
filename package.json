@@ -2,10 +2,12 @@
   "name": "getaddress-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/getaddress-api-es.js",
-  "module": "dist/getaddress-api-es.js",
-  "type": "module",
   "types": "./@types/getaddress-api.d.ts",
+  "main":"./dist/getaddress-api.mjs",
+  "engines": {
+    "node": ">= 13.2.0"
+  },
+  "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c",
     "cleanDist": "rimraf dist/*",

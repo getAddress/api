@@ -3,7 +3,7 @@ import {Suggestion, GetFailed,FindFailed, Result,AutocompleteOptions,
 import fetch from "node-fetch"
 
 
-class API
+class GetAddressClient
 {
 
     constructor(readonly api_key:string)
@@ -101,6 +101,6 @@ class API
 }
 
 export * from './Types';
-export {API}
-export default API
+export {GetAddressClient}
+export default GetAddressClient
 
