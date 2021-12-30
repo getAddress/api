@@ -1,12 +1,16 @@
 {
   "name": "getaddress-api",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "GetAddress.io core address look-up functionality",
   "types": "./@types/getaddress-api.d.ts",
   "main":"./dist/getaddress-api.mjs",
   "engines": {
     "node": ">= 13.2.0"
   },
+  "homepage": "https://github.com/getAddress/api/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/getAddress/api"},
   "type": "module",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c",
