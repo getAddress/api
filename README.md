@@ -2,7 +2,7 @@ GetAddress.io core address look-up functionality.
 
 # Installation
 ```
-npm install getaddress-sdk
+npm install getaddress-api
 ```
 # Usage
 ## Find
