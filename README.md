@@ -1,4 +1,4 @@
-This library exposes GetAddress.io core address look-up functionality.
+GetAddress.io core address look-up functionality.
 
 # Installation
 ```
