@@ -1,7 +1,7 @@
 {
   "name": "getaddress-api",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "GetAddress.io core address look-up functionality",
   "types": "./@types/getaddress-api.d.ts",
   "main":"./dist/getaddress-api.mjs",
   "engines": {
@@ -19,7 +19,7 @@
     "prepublishOnly": "npm test"
   },
   "keywords": [
-    "getaddress.io postcode getaddress getaddress()"
+    "getaddress.io postcode getaddress getaddress() find autocomplete"
   ],
   "author": "Lee Smith",
   "license": "MIT",
