@@ -12,7 +12,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\ts\\API.ts",
+            "program": "${workspaceFolder}\\ts\\test\\api.test.ts",
             
             "outFiles": [
                 "${workspaceFolder}/src/*.js.map",

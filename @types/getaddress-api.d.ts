@@ -27,19 +27,6 @@ declare class GetSuccess extends Success<GetSuccess, GetFailed> {
     toSuccess(): GetSuccess;
     toFailed(): GetFailed;
 }
-declare class FindSuccess extends Success<FindSuccess, FindFailed> {
-    readonly addresses: FindAddresses;
-    constructor(addresses: FindAddresses);
-    toSuccess(): FindSuccess;
-    toFailed(): FindFailed;
-}
-declare class FindFailed extends Result<FindSuccess, FindFailed> {
-    readonly status: number;
-    readonly message: string;
-    constructor(status: number, message: string);
-    toSuccess(): FindSuccess;
-    toFailed(): FindFailed;
-}
 declare class AutocompleteFailed extends Result<AutocompleteSuccess, AutocompleteFailed> {
     readonly status: number;
     readonly message: string;
@@ -78,13 +65,6 @@ declare class Address {
     readonly country: string;
     constructor(formatted_address: string[], thoroughfare: string, building_name: string, sub_building_name: string, sub_building_number: string, building_number: string, line_1: string, line_2: string, line_3: string, line_4: string, locality: string, town_or_city: string, county: string, district: string, country: string);
 }
-declare class FindAddresses {
-    readonly postcode: string;
-    readonly latitude: number;
-    readonly longitude: number;
-    readonly addresses: Address[];
-    constructor(postcode: string, latitude: number, longitude: number, addresses: Address[]);
-}
 declare class AutocompleteAddress extends Address {
     readonly postcode: string;
     readonly latitude: number;
@@ -108,12 +88,13 @@ declare class AutocompleteAddress extends Address {
     constructor(postcode: string, latitude: number, longitude: number, formatted_address: string[], thoroughfare: string, building_name: string, building_number: string, sub_building_name: string, sub_building_number: string, line_1: string, line_2: string, line_3: string, line_4: string, locality: string, town_or_city: string, county: string, district: string, country: string, residential: boolean);
 }
 
-declare class GetAddressClient {
+declare class Client {
     readonly api_key: string;
-    constructor(api_key: string);
+    readonly autocomplete_url: string;
+    readonly get_url: string;
+    constructor(api_key: string, autocomplete_url?: string, get_url?: string);
     autocomplete(query: string, options?: AutocompleteOptions): Promise<Result<AutocompleteSuccess, AutocompleteFailed>>;
     get(id: string): Promise<Result<GetSuccess, GetFailed>>;
-    find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
 }
 
-export { Address, AutocompleteAddress, AutocompleteFailed, AutocompleteOptions, AutocompleteSuccess, FindAddresses, FindFailed, FindSuccess, GetAddressClient, GetFailed, GetSuccess, Result, Success, Suggestion, GetAddressClient as default };
+export { AutocompleteAddress, AutocompleteFailed, AutocompleteOptions, AutocompleteSuccess, GetFailed, GetSuccess, Result, Suggestion, Client as default };
