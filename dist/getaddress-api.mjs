@@ -70,6 +70,7 @@ class AutocompleteOptions {
         this.all = false;
         this.template = null;
         this.top = null;
+        this.url = "https://api.getaddress.io/autocomplete/{query}";
     }
     static Default() {
         let options = new AutocompleteOptions();
@@ -162,6 +163,7 @@ class Client {
     }
     async autocomplete(query, options = AutocompleteOptions.Default()) {
         try {
+            options = Object.assign(AutocompleteOptions.Default(), options);
             let url = this.autocomplete_url.replace(/{query}/i, query);
             if (this.api_key) {
                 if (url.includes('?')) {

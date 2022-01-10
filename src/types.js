@@ -70,11 +70,20 @@ export class AutocompleteOptions {
         this.all = false;
         this.template = null;
         this.top = null;
+        this.url = "https://api.getaddress.io/autocomplete/{query}";
     }
     static Default() {
         let options = new AutocompleteOptions();
         options.all = true;
         return options;
+    }
+}
+export class GetOptions {
+    constructor() {
+        this.url = "https://api.getaddress.io/get/{id}";
+    }
+    static Default() {
+        return new GetOptions();
     }
 }
 export class Address {

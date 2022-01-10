@@ -45,6 +45,7 @@ declare class AutocompleteOptions {
     all: boolean;
     template: string | null;
     top: number | null;
+    url: string;
     static Default(): AutocompleteOptions;
 }
 declare class Address {

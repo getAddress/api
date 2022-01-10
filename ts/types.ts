@@ -93,7 +93,7 @@ export class AutocompleteOptions
     all:boolean = false;
     template:string|null = null;
     top:number|null = null;
-    
+   
     static Default():AutocompleteOptions
     {
         let options = new AutocompleteOptions();
@@ -101,6 +101,8 @@ export class AutocompleteOptions
         return options;
     }
 }
+
+
 
 export class Address
 {

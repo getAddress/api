@@ -1,4 +1,4 @@
-import GetAddress from "../Client"
+import GetAddress,{AutocompleteOptions} from "../Client"
 import "isomorphic-fetch"; 
 
 const apiKey:string = process.env.getaddress_apikey as string;
@@ -7,8 +7,12 @@ const apiKey:string = process.env.getaddress_apikey as string;
  test('autocomplete is success', async () => {
     let getAddress = new GetAddress(apiKey);
 
-    let autocompleteResult = await getAddress.autocomplete('TR19 7AA');
-    if(!autocompleteResult.isSuccess){
+    const options = AutocompleteOptions.Default();
+    
+    let autocompleteResult = await getAddress.autocomplete('TR19 7AA',options);
+    
+    if(!autocompleteResult.isSuccess)
+    {
         let failed = autocompleteResult.toFailed();
         console.log("--------------- "+ failed.message);
     }
@@ -24,6 +28,26 @@ const apiKey:string = process.env.getaddress_apikey as string;
     let getResult = await getAddress.get(id);
 
     expect(getResult.isSuccess).toBe(true);
+});
+
+test('autocomplete with all is success', async () => {
+    let getAddress = new GetAddress(apiKey);
+
+    const options:any = {all:true};
+    
+    let autocompleteResult = await getAddress.autocomplete('KW1 4YT',options);
+    
+    if(!autocompleteResult.isSuccess)
+    {
+        let failed = autocompleteResult.toFailed();
+        console.log("--------------- "+ failed.message);
+    }
+
+    expect(autocompleteResult.isSuccess).toBe(true);
+
+    let success = autocompleteResult.toSuccess();
+
+    expect(success.suggestions.length > 6).toBe(true);
 });
 
 test('find is success', async () => {

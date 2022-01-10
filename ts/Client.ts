@@ -18,6 +18,8 @@ class Client
     {
         try{
             
+            options = Object.assign(AutocompleteOptions.Default(),options);
+
             let url = this.autocomplete_url.replace(/{query}/i,query);
 
             if(this.api_key){
