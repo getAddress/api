@@ -120,4 +120,37 @@ export class AutocompleteAddress extends Address {
         this.residential = residential;
     }
 }
+export class FindAddresses {
+    constructor(postcode, latitude, longitude, addresses) {
+        this.postcode = postcode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.addresses = addresses;
+    }
+}
+export class FindSuccess extends Success {
+    constructor(addresses) {
+        super();
+        this.addresses = addresses;
+    }
+    toSuccess() {
+        return this;
+    }
+    toFailed() {
+        throw new Error('Did not fail');
+    }
+}
+export class FindFailed extends Result {
+    constructor(status, message) {
+        super(false);
+        this.status = status;
+        this.message = message;
+    }
+    toSuccess() {
+        throw new Error('Not a success');
+    }
+    toFailed() {
+        return this;
+    }
+}
 //# sourceMappingURL=Types.js.map

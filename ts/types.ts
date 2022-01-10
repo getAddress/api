@@ -157,3 +157,44 @@ export class AutocompleteAddress extends Address{
             town_or_city,county,district,country);
     }
 }
+
+export class FindAddresses
+{
+    constructor(
+        readonly postcode:string, 
+        readonly latitude:number,
+        readonly longitude:number,
+        readonly addresses:Address[]){
+
+    }
+}
+
+export class FindSuccess extends Success<FindSuccess,FindFailed>
+{
+    constructor(readonly addresses:FindAddresses)
+    {
+        super();
+    }
+
+    toSuccess(): FindSuccess {
+        return this;
+    }
+    toFailed(): FindFailed {
+        throw new Error('Did not fail');
+    }
+}
+
+export class FindFailed extends Result<FindSuccess,FindFailed>
+{
+    constructor(readonly status:number, readonly message:string)
+    {
+        super(false);
+    }
+
+    toSuccess(): FindSuccess {
+        throw new Error('Not a success');
+    }
+    toFailed(): FindFailed {
+        return this;
+    }
+}

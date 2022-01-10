@@ -87,6 +87,26 @@ declare class AutocompleteAddress extends Address {
     readonly residential: boolean;
     constructor(postcode: string, latitude: number, longitude: number, formatted_address: string[], thoroughfare: string, building_name: string, building_number: string, sub_building_name: string, sub_building_number: string, line_1: string, line_2: string, line_3: string, line_4: string, locality: string, town_or_city: string, county: string, district: string, country: string, residential: boolean);
 }
+declare class FindAddresses {
+    readonly postcode: string;
+    readonly latitude: number;
+    readonly longitude: number;
+    readonly addresses: Address[];
+    constructor(postcode: string, latitude: number, longitude: number, addresses: Address[]);
+}
+declare class FindSuccess extends Success<FindSuccess, FindFailed> {
+    readonly addresses: FindAddresses;
+    constructor(addresses: FindAddresses);
+    toSuccess(): FindSuccess;
+    toFailed(): FindFailed;
+}
+declare class FindFailed extends Result<FindSuccess, FindFailed> {
+    readonly status: number;
+    readonly message: string;
+    constructor(status: number, message: string);
+    toSuccess(): FindSuccess;
+    toFailed(): FindFailed;
+}
 
 declare class Client {
     readonly api_key: string;
@@ -95,6 +115,7 @@ declare class Client {
     constructor(api_key: string, autocomplete_url?: string, get_url?: string);
     autocomplete(query: string, options?: AutocompleteOptions): Promise<Result<AutocompleteSuccess, AutocompleteFailed>>;
     get(id: string): Promise<Result<GetSuccess, GetFailed>>;
+    find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
 }
 
-export { AutocompleteAddress, AutocompleteFailed, AutocompleteOptions, AutocompleteSuccess, GetFailed, GetSuccess, Result, Suggestion, Client as default };
+export { AutocompleteAddress, AutocompleteFailed, AutocompleteOptions, AutocompleteSuccess, FindAddresses, FindFailed, FindSuccess, GetFailed, GetSuccess, Result, Suggestion, Client as default };

@@ -120,18 +120,56 @@ class AutocompleteAddress extends Address {
         this.residential = residential;
     }
 }
+class FindAddresses {
+    constructor(postcode, latitude, longitude, addresses) {
+        this.postcode = postcode;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.addresses = addresses;
+    }
+}
+class FindSuccess extends Success {
+    constructor(addresses) {
+        super();
+        this.addresses = addresses;
+    }
+    toSuccess() {
+        return this;
+    }
+    toFailed() {
+        throw new Error('Did not fail');
+    }
+}
+class FindFailed extends Result {
+    constructor(status, message) {
+        super(false);
+        this.status = status;
+        this.message = message;
+    }
+    toSuccess() {
+        throw new Error('Not a success');
+    }
+    toFailed() {
+        return this;
+    }
+}
 
 class Client {
-    constructor(api_key, autocomplete_url = "https://api.getaddress.io/autocomplete/", get_url = "https://api.getaddress.io/get/") {
+    constructor(api_key, autocomplete_url = "https://api.getaddress.io/autocomplete/{query}", get_url = "https://api.getaddress.io/get/{id}") {
         this.api_key = api_key;
         this.autocomplete_url = autocomplete_url;
         this.get_url = get_url;
     }
     async autocomplete(query, options = AutocompleteOptions.Default()) {
         try {
-            let url = this.autocomplete_url + `${query}`;
+            let url = this.autocomplete_url.replace(/{query}/i, query);
             if (this.api_key) {
-                url = url + `?api-key=${this.api_key}`;
+                if (url.includes('?')) {
+                    url = url + '&api-key=' + this.api_key;
+                }
+                else {
+                    url = url + '?api-key=' + this.api_key;
+                }
             }
             const response = await fetch(url, {
                 method: 'post',
@@ -160,11 +198,21 @@ class Client {
     }
     async get(id) {
         try {
-            let url = this.get_url + `${id}`;
+            let url = this.get_url.replace(/{id}/i, id);
             if (this.api_key) {
-                url = url + `?api-key=${this.api_key}`;
+                if (url.includes('?')) {
+                    url = url + '&api-key=' + this.api_key;
+                }
+                else {
+                    url = url + '?api-key=' + this.api_key;
+                }
             }
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             if (response.status == 200) {
                 const json = await response.json();
                 const address = json;
@@ -180,6 +228,24 @@ class Client {
             return new GetFailed(401, 'Unauthorised');
         }
     }
+    async find(postcode) {
+        try {
+            const response = await fetch(`https://api.getaddress.io/find/${postcode}?api-key=${this.api_key}&expand=true`);
+            if (response.status == 200) {
+                const json = await response.json();
+                const addresses = json;
+                return new FindSuccess(addresses);
+            }
+            const json = await response.json();
+            return new FindFailed(response.status, json.Message);
+        }
+        catch (err) {
+            if (err instanceof Error) {
+                return new FindFailed(401, err.message);
+            }
+            return new FindFailed(401, 'Unauthorised');
+        }
+    }
 }
 
-export { AutocompleteAddress, AutocompleteFailed, AutocompleteOptions, AutocompleteSuccess, GetFailed, GetSuccess, Result, Suggestion, Client as default };
+export { AutocompleteAddress, AutocompleteFailed, AutocompleteOptions, AutocompleteSuccess, FindAddresses, FindFailed, FindSuccess, GetFailed, GetSuccess, Result, Suggestion, Client as default };
