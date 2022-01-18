@@ -45,12 +45,7 @@ export declare class AutocompleteOptions {
     all: boolean;
     template: string | null;
     top: number | null;
-    url: string;
     static Default(): AutocompleteOptions;
-}
-export declare class GetOptions {
-    url: string;
-    static Default(): GetOptions;
 }
 export declare class Address {
     readonly formatted_address: string[];

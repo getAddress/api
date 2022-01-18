@@ -70,7 +70,6 @@ class AutocompleteOptions {
         this.all = false;
         this.template = null;
         this.top = null;
-        this.url = "https://api.getaddress.io/autocomplete/{query}";
     }
     static Default() {
         let options = new AutocompleteOptions();
@@ -160,6 +159,8 @@ class Client {
         this.api_key = api_key;
         this.autocomplete_url = autocomplete_url;
         this.get_url = get_url;
+        this.response = undefined;
+        this.autocompleteAbortController = new AbortController();
     }
     async autocomplete(query, options = AutocompleteOptions.Default()) {
         try {
@@ -173,8 +174,13 @@ class Client {
                     url = url + '?api-key=' + this.api_key;
                 }
             }
-            const response = await fetch(url, {
+            if (this.response !== undefined) {
+                this.response = undefined;
+                this.autocompleteAbortController.abort();
+            }
+            this.response = await fetch(url, {
                 method: 'post',
+                signal: this.autocompleteAbortController.signal,
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -183,19 +189,25 @@ class Client {
                         return value;
                 })
             });
-            if (response.status == 200) {
-                const json = await response.json();
+            if (this.response.status == 200) {
+                const json = await this.response.json();
                 const suggestions = json.suggestions;
                 return new AutocompleteSuccess(suggestions);
             }
-            const json = await response.json();
-            return new AutocompleteFailed(response.status, json.Message);
+            const json = await this.response.json();
+            return new AutocompleteFailed(this.response.status, json.Message);
         }
         catch (err) {
             if (err instanceof Error) {
+                if (err.name === 'AbortError') {
+                    return new AutocompleteSuccess([]);
+                }
                 return new AutocompleteFailed(401, err.message);
             }
             return new AutocompleteFailed(401, 'Unauthorised');
+        }
+        finally {
+            this.response = undefined;
         }
     }
     async get(id) {
