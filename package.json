@@ -1,8 +1,8 @@
 {
   "name": "getaddress-api",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "GetAddress.io core address look-up functionality",
-  "types": "./@types/getaddress-api.d.ts",
+  "types": "./dist/getaddress-api.d.ts",
   "main": "./dist/getaddress-api.mjs",
   "engines": {
     "node": ">= 13.2.0"
@@ -16,11 +16,8 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c",
     "cleanDist": "rimraf dist/*",
-    "cleanSrc": "rimraf src/*",
-    "cleanTypes": "rimraf ./@types/*.d.ts",
-    "compile": "tsc --build tsconfig.json",
     "rollup": "rollup -c",
-    "build": "npm-run-all cleanDist cleanSrc cleanTypes compile rollup test",
+    "build": "npm-run-all cleanDist rollup test",
     "prepublishOnly": "npm test"
   },
   "keywords": [
@@ -35,8 +32,8 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "rollup": "^2.42.3",
-    "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-ts": "^2.0.5",
     "ts-jest": "^27.1.2",
     "typescript": "^4.5.4"
   },

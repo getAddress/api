@@ -6,19 +6,23 @@ import {GetFailed, Result,AutocompleteOptions, Suggestion,
 class Client
 {
     private readonly autocompleteAbortController:AbortController;
-    private response?:Response = undefined;
+    private readonly getAbortController:AbortController;
+    private autocompleteResponse?:Response = undefined;
+    private getResponse?:Response = undefined;
+
 
     constructor(readonly api_key:string, 
         readonly autocomplete_url:string = "https://api.getaddress.io/autocomplete/{query}",
         readonly get_url:string = "https://api.getaddress.io/get/{id}")
     {
         this.autocompleteAbortController= new AbortController();
+        this.getAbortController= new AbortController();
     }
 
     async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess,AutocompleteFailed>> 
     {
-        try{
-            
+        try
+        {
             options = Object.assign(AutocompleteOptions.Default(),options);
 
             let url = this.autocomplete_url.replace(/{query}/i,query);
@@ -32,13 +36,12 @@ class Client
                 }
             }
 
-            if(this.response !== undefined){
-                this.response = undefined;
+            if(this.autocompleteResponse !== undefined){
+                this.autocompleteResponse = undefined;
                 this.autocompleteAbortController.abort();
             }
 
-            
-            this.response = await fetch(url, {
+            this.autocompleteResponse = await fetch(url, {
                 method: 'post', 
                 signal: this.autocompleteAbortController.signal,
                 headers: {
@@ -50,14 +53,15 @@ class Client
                 })
             });
     
-            if(this.response.status == 200){
-                const json:any = await this.response.json();
+            if(this.autocompleteResponse.status == 200)
+            {
+                const json:any = await this.autocompleteResponse.json();
                 const suggestions =  json.suggestions as Suggestion[];
                 return new AutocompleteSuccess(suggestions);
             }
  
-            const json:any = await this.response.json();
-            return new AutocompleteFailed(this.response.status,json.Message);
+            const json:any = await this.autocompleteResponse.json();
+            return new AutocompleteFailed(this.autocompleteResponse.status,json.Message);
          }
          catch(err:unknown)
          {
@@ -73,15 +77,15 @@ class Client
          }
          finally 
          {
-             this.response = undefined;
+             this.autocompleteResponse = undefined;
          }
     }
 
     
     async get(id:string):Promise<Result<GetSuccess,GetFailed>> 
     {
-        try{
-            
+        try
+        {
             let url = this.get_url.replace(/{id}/i,id);
             
             if(this.api_key){
@@ -93,21 +97,28 @@ class Client
                 }
             }
 
-            const response = await fetch(url,{
+            if(this.getResponse !== undefined){
+                this.getResponse = undefined;
+                this.getAbortController.abort();
+            }
+
+            this.getResponse = await fetch(url,
+            {
                 method: 'get',
+                signal: this.getAbortController.signal,
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
     
-            if(response.status == 200){
-                const json:any = await response.json();
+            if(this.getResponse.status == 200){
+                const json:any = await this.getResponse.json();
                 const address =  json as AutocompleteAddress;
                 return new GetSuccess(address);
             }
  
-            const json:any = await response.json();
-            return new GetFailed(response.status,json.Message);
+            const json:any = await this.getResponse.json();
+            return new GetFailed(this.getResponse.status,json.Message);
          }
          catch(err:unknown)
          {
@@ -117,6 +128,9 @@ class Client
             }
 
             return new GetFailed(401,'Unauthorised');
+         }
+         finally{
+            this.getResponse = undefined;
          }
     }
 
