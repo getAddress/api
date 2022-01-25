@@ -50,6 +50,31 @@ test('autocomplete with all is success', async () => {
     expect(success.suggestions.length > 6).toBe(true);
 });
 
+test('autocomplete with residentional filter is success', async () => {
+    let getAddress = new GetAddress(apiKey);
+
+    const options:any = {
+        all:true,
+        filter:{
+            residential: true
+        }
+    };
+    
+    let autocompleteResult = await getAddress.autocomplete('KW1 4YT',options);
+    
+    if(!autocompleteResult.isSuccess)
+    {
+        let failed = autocompleteResult.toFailed();
+        console.log("--------------- "+ failed.message);
+    }
+
+    expect(autocompleteResult.isSuccess).toBe(true);
+
+    let success = autocompleteResult.toSuccess();
+
+    expect(success.suggestions.length > 0).toBe(true);
+});
+
 test('find is success', async () => {
     let getAddress = new GetAddress(apiKey);
     let result = await getAddress.find('TR19 7AA');

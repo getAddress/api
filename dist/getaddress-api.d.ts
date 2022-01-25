@@ -43,9 +43,24 @@ declare class GetFailed extends Result<GetSuccess, GetFailed> {
 }
 declare class AutocompleteOptions {
     all: boolean;
-    template: string | null;
-    top: number | null;
+    template: string;
+    top: number;
+    filter: AutocompleteFilter;
     static Default(): AutocompleteOptions;
+}
+declare class AutocompleteFilter {
+    county: string;
+    locality: string;
+    district: string;
+    town_or_city: string;
+    postcode: string;
+    residential: boolean;
+    radius: AutocompleteFilterRadius;
+}
+declare class AutocompleteFilterRadius {
+    km: number;
+    longitude: number;
+    latitude: number;
 }
 declare class Address {
     readonly formatted_address: string[];

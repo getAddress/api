@@ -1,8 +1,6 @@
 import {GetFailed, Result,AutocompleteOptions, Suggestion,
     AutocompleteSuccess, AutocompleteAddress,GetSuccess, AutocompleteFailed,FindAddresses,FindSuccess,FindFailed} from "./Types"
     
-
-
 class Client
 {
     private readonly autocompleteAbortController:AbortController;
@@ -47,11 +45,13 @@ class Client
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(options, (key, value) => {
-                    if (value)
-                        return value;
-                })
+                body: JSON.stringify(options)
             });
+
+           /*  body: JSON.stringify(options, (key, value) => {
+                if (value)
+                    return value;
+            }) */
     
             if(this.autocompleteResponse.status == 200)
             {
