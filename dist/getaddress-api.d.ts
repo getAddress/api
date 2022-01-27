@@ -126,8 +126,8 @@ declare class Client {
     readonly api_key: string;
     readonly autocomplete_url: string;
     readonly get_url: string;
-    private readonly autocompleteAbortController;
-    private readonly getAbortController;
+    private autocompleteAbortController;
+    private getAbortController;
     private autocompleteResponse?;
     private getResponse?;
     constructor(api_key: string, autocomplete_url?: string, get_url?: string);
@@ -135,4 +135,4 @@ declare class Client {
     get(id: string): Promise<Result<GetSuccess, GetFailed>>;
     find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
 }
-export { Client as default, GetFailed, Result, AutocompleteOptions, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed };
+export { Client as default, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed };

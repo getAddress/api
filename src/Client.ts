@@ -1,10 +1,10 @@
 import {GetFailed, Result,AutocompleteOptions, Suggestion,
-    AutocompleteSuccess, AutocompleteAddress,GetSuccess, AutocompleteFailed,FindAddresses,FindSuccess,FindFailed} from "./Types"
+    AutocompleteSuccess, AutocompleteAddress,GetSuccess, AutocompleteFailed,FindAddresses,FindSuccess,FindFailed, AutocompleteFilter, AutocompleteFilterRadius} from "./Types"
     
 class Client
 {
-    private readonly autocompleteAbortController:AbortController;
-    private readonly getAbortController:AbortController;
+    private  autocompleteAbortController:AbortController;
+    private  getAbortController:AbortController;
     private autocompleteResponse?:Response = undefined;
     private getResponse?:Response = undefined;
 
@@ -37,6 +37,7 @@ class Client
             if(this.autocompleteResponse !== undefined){
                 this.autocompleteResponse = undefined;
                 this.autocompleteAbortController.abort();
+                this.autocompleteAbortController= new AbortController();
             }
 
             this.autocompleteResponse = await fetch(url, {
@@ -48,11 +49,7 @@ class Client
                 body: JSON.stringify(options)
             });
 
-           /*  body: JSON.stringify(options, (key, value) => {
-                if (value)
-                    return value;
-            }) */
-    
+
             if(this.autocompleteResponse.status == 200)
             {
                 const json:any = await this.autocompleteResponse.json();
@@ -100,6 +97,7 @@ class Client
             if(this.getResponse !== undefined){
                 this.getResponse = undefined;
                 this.getAbortController.abort();
+                this.getAbortController= new AbortController();
             }
 
             this.getResponse = await fetch(url,
@@ -163,5 +161,9 @@ class Client
 
 
 
-export {Client as default,GetFailed, Result,AutocompleteOptions, Suggestion,
+export {Client as default,GetFailed, Result,
+    AutocompleteOptions, 
+    AutocompleteFilter,
+    AutocompleteFilterRadius,
+    Suggestion,
     AutocompleteSuccess, AutocompleteAddress,GetSuccess, AutocompleteFailed,FindAddresses,FindSuccess,FindFailed }
