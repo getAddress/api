@@ -240,4 +240,4 @@ export {Client as default,GetFailed, Result,
     GetSuccess, 
     AutocompleteFailed,FindAddresses,
     FindSuccess,FindFailed,TypeaheadFailed,
-    TypeaheadSuccess }
+    TypeaheadSuccess,TypeaheadOptions }

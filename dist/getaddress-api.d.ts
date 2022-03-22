@@ -157,4 +157,4 @@ declare class Client {
     find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
     typeahead(term: string, options?: TypeaheadOptions): Promise<Result<TypeaheadSuccess, TypeaheadFailed>>;
 }
-export { Client as default, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed, TypeaheadFailed, TypeaheadSuccess };
+export { Client as default, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed, TypeaheadFailed, TypeaheadSuccess, TypeaheadOptions };
