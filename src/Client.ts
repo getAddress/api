@@ -1,20 +1,26 @@
 import {GetFailed, Result,AutocompleteOptions, Suggestion,
-    AutocompleteSuccess, AutocompleteAddress,GetSuccess, AutocompleteFailed,FindAddresses,FindSuccess,FindFailed, AutocompleteFilter, AutocompleteFilterRadius} from "./Types"
+    AutocompleteSuccess, AutocompleteAddress,GetSuccess, 
+    AutocompleteFailed,FindAddresses,FindSuccess,FindFailed, 
+    AutocompleteFilter, AutocompleteFilterRadius, TypeaheadSuccess, 
+    TypeaheadFailed,TypeaheadOptions} from "./Types"
     
 class Client
 {
     private  autocompleteAbortController:AbortController;
     private  getAbortController:AbortController;
+    private  typeaheadAbortController:AbortController;
     private autocompleteResponse?:Response = undefined;
     private getResponse?:Response = undefined;
-
+    private typeaheadResponse?:Response = undefined;
 
     constructor(readonly api_key:string, 
         readonly autocomplete_url:string = "https://api.getaddress.io/autocomplete/{query}",
-        readonly get_url:string = "https://api.getaddress.io/get/{id}")
+        readonly get_url:string = "https://api.getaddress.io/get/{id}",
+        readonly typeahead_url:string = "https://api.getaddress.io/typeahead/{term}")
     {
         this.autocompleteAbortController= new AbortController();
         this.getAbortController= new AbortController();
+        this.typeaheadAbortController = new AbortController();
     }
 
     async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess,AutocompleteFailed>> 
@@ -157,6 +163,69 @@ class Client
             return new FindFailed(401,'Unauthorised');
          }
     }
+
+
+    async typeahead(term:string, options:TypeaheadOptions = TypeaheadOptions.Default()):Promise<Result<TypeaheadSuccess,TypeaheadFailed>> 
+    {
+        try
+        {
+            options = Object.assign(TypeaheadOptions.Default(),options);
+
+            let url = this.typeahead_url.replace(/{term}/i,term);
+
+            if(this.api_key){
+                if(url.includes('?')){
+                    url = url+ '&api-key='+ this.api_key;
+                }
+                else{
+                    url = url+ '?api-key='+ this.api_key;
+                }
+            }
+
+            if(this.typeaheadResponse !== undefined){
+                this.typeaheadResponse = undefined;
+                this.typeaheadAbortController.abort();
+                this.typeaheadAbortController= new AbortController();
+            }
+
+            this.typeaheadResponse = await fetch(url, {
+                method: 'post', 
+                signal: this.autocompleteAbortController.signal,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(options)
+            });
+
+
+            if(this.typeaheadResponse.status == 200)
+            {
+                const json:any = await this.typeaheadResponse.json();
+                const results =  json as string[];
+                return new TypeaheadSuccess(results);
+            }
+ 
+            const json:any = await this.typeaheadResponse.json();
+            return new TypeaheadFailed(this.typeaheadResponse.status,json.Message);
+         }
+         catch(err:unknown)
+         {
+            if(err instanceof Error)
+            {
+                if(err.name === 'AbortError'){
+                    return new TypeaheadSuccess([]);
+                }
+                return new TypeaheadFailed(401,err.message);
+            }
+
+            return new TypeaheadFailed(401,'Unauthorised');
+         }
+         finally 
+         {
+             this.typeaheadResponse = undefined;
+         }
+    }
+
 }
 
 
@@ -166,4 +235,9 @@ export {Client as default,GetFailed, Result,
     AutocompleteFilter,
     AutocompleteFilterRadius,
     Suggestion,
-    AutocompleteSuccess, AutocompleteAddress,GetSuccess, AutocompleteFailed,FindAddresses,FindSuccess,FindFailed }
+    AutocompleteSuccess, 
+    AutocompleteAddress,
+    GetSuccess, 
+    AutocompleteFailed,FindAddresses,
+    FindSuccess,FindFailed,TypeaheadFailed,
+    TypeaheadSuccess }

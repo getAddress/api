@@ -102,6 +102,20 @@ export class AutocompleteOptions
         return options;
     }
 }
+
+export class TypeaheadOptions
+{
+    
+    top:number = undefined;
+    search:string[] = undefined;
+   
+    static Default():TypeaheadOptions
+    {
+        let options = new TypeaheadOptions();
+        return options;
+    }
+}
+
 export class AutocompleteFilter
 {
     county:string = undefined;
@@ -199,7 +213,7 @@ export class FindSuccess extends Success<FindSuccess,FindFailed>
         return this;
     }
     toFailed(): FindFailed {
-        throw new Error('Did not fail');
+        throw new Error('failed');
     }
 }
 
@@ -211,9 +225,39 @@ export class FindFailed extends Result<FindSuccess,FindFailed>
     }
 
     toSuccess(): FindSuccess {
-        throw new Error('Not a success');
+        throw new Error('failed');
     }
     toFailed(): FindFailed {
+        return this;
+    }
+}
+
+export class TypeaheadSuccess extends Success<TypeaheadSuccess,TypeaheadFailed>
+{
+    constructor(readonly results:string[])
+    {
+        super();
+    }
+
+    toSuccess(): TypeaheadSuccess {
+        return this;
+    }
+    toFailed(): TypeaheadFailed {
+        throw new Error('failed');
+    }
+}
+
+export class TypeaheadFailed extends Result<TypeaheadSuccess,TypeaheadFailed>
+{
+    constructor(readonly status:number, readonly message:string)
+    {
+        super(false);
+    }
+
+    toSuccess(): TypeaheadSuccess {
+        throw new Error('failed');
+    }
+    toFailed(): TypeaheadFailed {
         return this;
     }
 }

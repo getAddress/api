@@ -48,6 +48,11 @@ declare class AutocompleteOptions {
     filter: AutocompleteFilter;
     static Default(): AutocompleteOptions;
 }
+declare class TypeaheadOptions {
+    top: number;
+    search: string[];
+    static Default(): TypeaheadOptions;
+}
 declare class AutocompleteFilter {
     county: string;
     locality: string;
@@ -122,17 +127,34 @@ declare class FindFailed extends Result<FindSuccess, FindFailed> {
     toSuccess(): FindSuccess;
     toFailed(): FindFailed;
 }
+declare class TypeaheadSuccess extends Success<TypeaheadSuccess, TypeaheadFailed> {
+    readonly results: string[];
+    constructor(results: string[]);
+    toSuccess(): TypeaheadSuccess;
+    toFailed(): TypeaheadFailed;
+}
+declare class TypeaheadFailed extends Result<TypeaheadSuccess, TypeaheadFailed> {
+    readonly status: number;
+    readonly message: string;
+    constructor(status: number, message: string);
+    toSuccess(): TypeaheadSuccess;
+    toFailed(): TypeaheadFailed;
+}
 declare class Client {
     readonly api_key: string;
     readonly autocomplete_url: string;
     readonly get_url: string;
+    readonly typeahead_url: string;
     private autocompleteAbortController;
     private getAbortController;
+    private typeaheadAbortController;
     private autocompleteResponse?;
     private getResponse?;
-    constructor(api_key: string, autocomplete_url?: string, get_url?: string);
+    private typeaheadResponse?;
+    constructor(api_key: string, autocomplete_url?: string, get_url?: string, typeahead_url?: string);
     autocomplete(query: string, options?: AutocompleteOptions): Promise<Result<AutocompleteSuccess, AutocompleteFailed>>;
     get(id: string): Promise<Result<GetSuccess, GetFailed>>;
     find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
+    typeahead(term: string, options?: TypeaheadOptions): Promise<Result<TypeaheadSuccess, TypeaheadFailed>>;
 }
-export { Client as default, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed };
+export { Client as default, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed, TypeaheadFailed, TypeaheadSuccess };
