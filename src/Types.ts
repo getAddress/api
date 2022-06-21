@@ -90,10 +90,10 @@ export class GetFailed extends Result<GetSuccess,GetFailed>
 
 export class AutocompleteOptions
 {
-    all:boolean = undefined;
-    template:string = undefined;
-    top:number = undefined;
-    filter:AutocompleteFilter = undefined;
+    all?:boolean = undefined;
+    template?:string = undefined;
+    top?:number = undefined;
+    filter?:AutocompleteFilter = undefined;
    
     static Default():AutocompleteOptions
     {
@@ -118,13 +118,13 @@ export class TypeaheadOptions
 
 export class AutocompleteFilter
 {
-    county:string = undefined;
-    locality:string= undefined;
-    district:string= undefined;
-    town_or_city:string=undefined;
-    postcode:string=undefined;
-    residential:boolean=undefined;
-    radius:AutocompleteFilterRadius=undefined;
+    county?:string = undefined;
+    locality?:string= undefined;
+    district?:string= undefined;
+    town_or_city?:string=undefined;
+    postcode?:string=undefined;
+    residential?:boolean=undefined;
+    radius?:AutocompleteFilterRadius=undefined;
 }
 
 export class AutocompleteFilterRadius
