@@ -23,7 +23,7 @@ class Client
         this.typeaheadAbortController = new AbortController();
     }
 
-    async autocomplete(query:string, options:AutocompleteOptions = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess,AutocompleteFailed>> 
+    async autocomplete(query:string, options:Partial<AutocompleteOptions> = AutocompleteOptions.Default()):Promise<Result<AutocompleteSuccess,AutocompleteFailed>> 
     {
         try
         {

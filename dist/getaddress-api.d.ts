@@ -42,10 +42,10 @@ declare class GetFailed extends Result<GetSuccess, GetFailed> {
     toFailed(): GetFailed;
 }
 declare class AutocompleteOptions {
-    all?: boolean;
-    template?: string;
-    top?: number;
-    filter?: AutocompleteFilter;
+    all: boolean;
+    template: string;
+    top: number;
+    filter: Partial<AutocompleteFilter>;
     static Default(): AutocompleteOptions;
 }
 declare class TypeaheadOptions {
@@ -54,13 +54,13 @@ declare class TypeaheadOptions {
     static Default(): TypeaheadOptions;
 }
 declare class AutocompleteFilter {
-    county?: string;
-    locality?: string;
-    district?: string;
-    town_or_city?: string;
-    postcode?: string;
-    residential?: boolean;
-    radius?: AutocompleteFilterRadius;
+    county: string;
+    locality: string;
+    district: string;
+    town_or_city: string;
+    postcode: string;
+    residential: boolean;
+    radius: AutocompleteFilterRadius;
 }
 declare class AutocompleteFilterRadius {
     km: number;
@@ -152,7 +152,7 @@ declare class Client {
     private getResponse?;
     private typeaheadResponse?;
     constructor(api_key: string, autocomplete_url?: string, get_url?: string, typeahead_url?: string);
-    autocomplete(query: string, options?: AutocompleteOptions): Promise<Result<AutocompleteSuccess, AutocompleteFailed>>;
+    autocomplete(query: string, options?: Partial<AutocompleteOptions>): Promise<Result<AutocompleteSuccess, AutocompleteFailed>>;
     get(id: string): Promise<Result<GetSuccess, GetFailed>>;
     find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
     typeahead(term: string, options?: TypeaheadOptions): Promise<Result<TypeaheadSuccess, TypeaheadFailed>>;
