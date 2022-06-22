@@ -14,6 +14,15 @@ export default [
     {
         input: "src/Client.ts",
         output: {
+            file:"dist/getaddress-api.js",
+            format:"es",
+            sourcemap:  "inline"
+        }
+        ,plugins:[nodeResolve(),ts()]
+    },
+    {
+        input: "src/Client.ts",
+        output: {
             file:"dist/getaddress-api.cjs",
             format:"cjs",
             sourcemap:  "inline"

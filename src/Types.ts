@@ -93,7 +93,7 @@ export class AutocompleteOptions
     all:boolean = undefined;
     template:string = undefined;
     top:number = undefined;
-    filter:AutocompleteFilter = undefined;
+    filter:Partial<AutocompleteFilter> = undefined;
    
     static Default():AutocompleteOptions
     {

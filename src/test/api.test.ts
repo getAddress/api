@@ -3,8 +3,7 @@ import "isomorphic-fetch";
 
 const apiKey:string = process.env.getaddress_apikey as string;
 
-
- test('autocomplete is success', async () => {
+test('autocomplete is success', async () => {
     let getAddress = new GetAddress(apiKey);
 
     const options = AutocompleteOptions.Default();
@@ -33,7 +32,7 @@ const apiKey:string = process.env.getaddress_apikey as string;
 test('autocomplete with all is success', async () => {
     let getAddress = new GetAddress(apiKey);
 
-    const options:any = {all:true};
+    const options = {all:true};
     
     let autocompleteResult = await getAddress.autocomplete('KW1 4YT',options);
     
@@ -53,7 +52,7 @@ test('autocomplete with all is success', async () => {
 test('autocomplete with residentional filter is success', async () => {
     let getAddress = new GetAddress(apiKey);
 
-    const options:any = {
+    const options = {
         all:true,
         filter:{
             residential: true
