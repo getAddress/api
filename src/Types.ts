@@ -84,41 +84,29 @@ export class GetFailed extends Result<GetSuccess, GetFailed> {
 
 export interface AutocompleteOptions {
   all: boolean;
-
   template: string;
-
   top: number;
-
   filter: Partial<AutocompleteFilter>;
 }
 
 export interface TypeaheadOptions {
   top: number;
-
   search: string[];
 }
 
 export interface AutocompleteFilterRadius {
   km: number;
-
   longitude: number;
-
   latitude: number;
 }
 
 export interface AutocompleteFilter {
   county: string;
-
   locality: string;
-
   district: string;
-
   town_or_city: string;
-
   postcode: string;
-
   residential: boolean;
-
   radius: AutocompleteFilterRadius;
 }
 
