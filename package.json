@@ -1,6 +1,6 @@
 {
   "name": "getaddress-api",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "GetAddress.io core address look-up functionality",
   "types": "./dist/getaddress-api.d.ts",
   "main": "./dist/getaddress-api.mjs",

@@ -94,7 +94,7 @@ export class AutocompleteOptions
     template:string = undefined;
     top:number = undefined;
     filter:Partial<AutocompleteFilter> = undefined;
-    fuzzy: true;
+    fuzzy:boolean =  true;
 
     static Default():AutocompleteOptions
     {
