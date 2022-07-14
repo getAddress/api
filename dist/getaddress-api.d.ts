@@ -46,6 +46,7 @@ declare class AutocompleteOptions {
     template: string;
     top: number;
     filter: Partial<AutocompleteFilter>;
+    fuzzy: true;
     static Default(): AutocompleteOptions;
 }
 declare class TypeaheadOptions {
