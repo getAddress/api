@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": ["eslint:recommended", "airbnb", "airbnb-typescript/base"],
+  "rules": {
+    "@typescript-eslint/type-annotation-spacing": ["warn", {
+      "after": true
+    }]
+  }
+}
