@@ -20,7 +20,7 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "build": "npm-run-all cleanDist rollup test",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "getaddress.io postcode getaddress getaddress() find autocomplete"
