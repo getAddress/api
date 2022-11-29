@@ -1,8 +1,14 @@
-declare class Suggestion {
-    readonly address: string;
-    readonly url: string;
-    readonly id: string;
-    constructor(address: string, url: string, id: string);
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-classes-per-file */
+interface Suggestion {
+    id: string;
+    url: string;
+    address: string;
+}
+interface LocationSuggestion {
+    id: string;
+    url: string;
+    location: string;
 }
 declare abstract class Result<S, F> {
     readonly isSuccess: boolean;
@@ -21,11 +27,35 @@ declare class AutocompleteSuccess extends Success<AutocompleteSuccess, Autocompl
     toSuccess(): AutocompleteSuccess;
     toFailed(): AutocompleteFailed;
 }
+declare class LocationSuccess extends Success<LocationSuccess, LocationFailed> {
+    readonly suggestions: LocationSuggestion[];
+    constructor(suggestions: LocationSuggestion[]);
+    toSuccess(): LocationSuccess;
+    toFailed(): LocationFailed;
+}
+interface Suggestion {
+    id: string;
+    url: string;
+    address: string;
+}
 declare class GetSuccess extends Success<GetSuccess, GetFailed> {
     readonly address: AutocompleteAddress;
     constructor(address: AutocompleteAddress);
     toSuccess(): GetSuccess;
     toFailed(): GetFailed;
+}
+declare class GetLocationSuccess extends Success<GetLocationSuccess, GetLocationFailed> {
+    readonly location: LocationAddress;
+    constructor(location: LocationAddress);
+    toSuccess(): GetLocationSuccess;
+    toFailed(): GetLocationFailed;
+}
+declare class GetLocationFailed extends Result<GetLocationSuccess, GetLocationFailed> {
+    readonly status: number;
+    readonly message: string;
+    constructor(status: number, message: string);
+    toSuccess(): GetLocationSuccess;
+    toFailed(): GetLocationFailed;
 }
 declare class AutocompleteFailed extends Result<AutocompleteSuccess, AutocompleteFailed> {
     readonly status: number;
@@ -34,6 +64,13 @@ declare class AutocompleteFailed extends Result<AutocompleteSuccess, Autocomplet
     toSuccess(): AutocompleteSuccess;
     toFailed(): AutocompleteFailed;
 }
+declare class LocationFailed extends Result<LocationSuccess, LocationFailed> {
+    readonly status: number;
+    readonly message: string;
+    constructor(status: number, message: string);
+    toSuccess(): LocationSuccess;
+    toFailed(): LocationFailed;
+}
 declare class GetFailed extends Result<GetSuccess, GetFailed> {
     readonly status: number;
     readonly message: string;
@@ -41,20 +78,34 @@ declare class GetFailed extends Result<GetSuccess, GetFailed> {
     toSuccess(): GetSuccess;
     toFailed(): GetFailed;
 }
-declare class AutocompleteOptions {
+interface AutocompleteOptions {
     all: boolean;
     template: string;
     top: number;
     filter: Partial<AutocompleteFilter>;
-    fuzzy: boolean;
-    static Default(): AutocompleteOptions;
 }
-declare class TypeaheadOptions {
+interface LocationOptions {
+    template: string;
+    template_outcode: string;
+    template_postcode: string;
+    top: number;
+    filter: Partial<LocationFilter>;
+}
+interface TypeaheadOptions {
     top: number;
     search: string[];
-    static Default(): TypeaheadOptions;
 }
-declare class AutocompleteFilter {
+interface AutocompleteFilterRadius {
+    km: number;
+    longitude: number;
+    latitude: number;
+}
+interface LocationFilterRadius {
+    km: number;
+    longitude: number;
+    latitude: number;
+}
+interface AutocompleteFilter {
     county: string;
     locality: string;
     district: string;
@@ -63,57 +114,54 @@ declare class AutocompleteFilter {
     residential: boolean;
     radius: AutocompleteFilterRadius;
 }
-declare class AutocompleteFilterRadius {
-    km: number;
-    longitude: number;
+interface LocationFilter {
+    county: string;
+    country: string;
+    town_or_city: string;
+    area: string;
+    postcode: string;
+    outcode: string;
+    radius: LocationFilterRadius;
+}
+interface Address {
+    formatted_address: string[];
+    thoroughfare: string;
+    building_name: string;
+    sub_building_name: string;
+    sub_building_number: string;
+    building_number: string;
+    line_1: string;
+    line_2: string;
+    line_3: string;
+    line_4: string;
+    locality: string;
+    town_or_city: string;
+    county: string;
+    district: string;
+    country: string;
+}
+interface AutocompleteAddress extends Address {
+    postcode: string;
     latitude: number;
+    longitude: number;
+    locality: string;
+    residential: boolean;
 }
-declare class Address {
-    readonly formatted_address: string[];
-    readonly thoroughfare: string;
-    readonly building_name: string;
-    readonly sub_building_name: string;
-    readonly sub_building_number: string;
-    readonly building_number: string;
-    readonly line_1: string;
-    readonly line_2: string;
-    readonly line_3: string;
-    readonly line_4: string;
-    readonly locality: string;
-    readonly town_or_city: string;
-    readonly county: string;
-    readonly district: string;
-    readonly country: string;
-    constructor(formatted_address: string[], thoroughfare: string, building_name: string, sub_building_name: string, sub_building_number: string, building_number: string, line_1: string, line_2: string, line_3: string, line_4: string, locality: string, town_or_city: string, county: string, district: string, country: string);
+interface LocationAddress {
+    postcode: string;
+    outcode: string;
+    county: string;
+    country: string;
+    town_or_city: string;
+    area: string;
+    latitude: number;
+    longitude: number;
 }
-declare class AutocompleteAddress extends Address {
-    readonly postcode: string;
-    readonly latitude: number;
-    readonly longitude: number;
-    readonly formatted_address: string[];
-    readonly thoroughfare: string;
-    readonly building_name: string;
-    readonly building_number: string;
-    readonly sub_building_name: string;
-    readonly sub_building_number: string;
-    readonly line_1: string;
-    readonly line_2: string;
-    readonly line_3: string;
-    readonly line_4: string;
-    readonly locality: string;
-    readonly town_or_city: string;
-    readonly county: string;
-    readonly district: string;
-    readonly country: string;
-    readonly residential: boolean;
-    constructor(postcode: string, latitude: number, longitude: number, formatted_address: string[], thoroughfare: string, building_name: string, building_number: string, sub_building_name: string, sub_building_number: string, line_1: string, line_2: string, line_3: string, line_4: string, locality: string, town_or_city: string, county: string, district: string, country: string, residential: boolean);
-}
-declare class FindAddresses {
-    readonly postcode: string;
-    readonly latitude: number;
-    readonly longitude: number;
-    readonly addresses: Address[];
-    constructor(postcode: string, latitude: number, longitude: number, addresses: Address[]);
+interface FindAddresses {
+    postcode: string;
+    latitude: number;
+    longitude: number;
+    addresses: Address[];
 }
 declare class FindSuccess extends Success<FindSuccess, FindFailed> {
     readonly addresses: FindAddresses;
@@ -145,17 +193,25 @@ declare class Client {
     readonly api_key: string;
     readonly autocomplete_url: string;
     readonly get_url: string;
+    readonly location_url: string;
+    readonly get_location_url: string;
     readonly typeahead_url: string;
     private autocompleteAbortController;
     private getAbortController;
     private typeaheadAbortController;
+    private locationAbortController;
+    private getLocationAbortController;
     private autocompleteResponse?;
     private getResponse?;
+    private locationResponse?;
+    private getLocationResponse?;
     private typeaheadResponse?;
-    constructor(api_key: string, autocomplete_url?: string, get_url?: string, typeahead_url?: string);
+    constructor(api_key: string, autocomplete_url?: string, get_url?: string, location_url?: string, get_location_url?: string, typeahead_url?: string);
+    location(query: string, options?: Partial<LocationOptions>): Promise<Result<LocationSuccess, LocationFailed>>;
+    getLocation(id: string): Promise<Result<GetLocationSuccess, GetLocationFailed>>;
     autocomplete(query: string, options?: Partial<AutocompleteOptions>): Promise<Result<AutocompleteSuccess, AutocompleteFailed>>;
     get(id: string): Promise<Result<GetSuccess, GetFailed>>;
     find(postcode: string): Promise<Result<FindSuccess, FindFailed>>;
-    typeahead(term: string, options?: TypeaheadOptions): Promise<Result<TypeaheadSuccess, TypeaheadFailed>>;
+    typeahead(term: string, options?: Partial<TypeaheadOptions>): Promise<Result<TypeaheadSuccess, TypeaheadFailed>>;
 }
-export { Client as default, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed, TypeaheadFailed, TypeaheadSuccess, TypeaheadOptions };
+export { Client as default, Client, GetFailed, Result, AutocompleteOptions, AutocompleteFilter, AutocompleteFilterRadius, Suggestion, AutocompleteSuccess, AutocompleteAddress, GetSuccess, AutocompleteFailed, FindAddresses, FindSuccess, FindFailed, TypeaheadFailed, TypeaheadSuccess, TypeaheadOptions };

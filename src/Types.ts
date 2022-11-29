@@ -1,264 +1,304 @@
-export class Suggestion 
-{
-    constructor(readonly address:string, readonly url:string, readonly id:string) 
-    {
-        
-    }
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-classes-per-file */
+export interface Suggestion {
+  id: string;
+  url: string;
+  address: string;
 }
 
-export abstract class Result<S,F>
-{
-    constructor(readonly isSuccess:boolean){
-        
-    }
-
-    abstract toSuccess():S;
-    abstract toFailed():F;
+export interface LocationSuggestion {
+  id: string;
+  url: string;
+  location: string;
 }
 
-export abstract class Success<S,F> extends Result<S,F>
-{
-    constructor()
-    {
-        super(true);
-    }
+export abstract class Result<S, F> {
+  constructor(readonly isSuccess: boolean) {
 
-    abstract toSuccess():S;
-    abstract toFailed():F;
+  }
+
+  abstract toSuccess(): S;
+
+  abstract toFailed(): F;
 }
 
-export class AutocompleteSuccess extends Success<AutocompleteSuccess,AutocompleteFailed>
-{
-    constructor(readonly suggestions:Suggestion[])
-    {
-        super();
-    }
+export abstract class Success<S, F> extends Result<S, F> {
+  constructor() {
+    super(true);
+  }
 
-    toSuccess(): AutocompleteSuccess {
-        return this;
-    }
-    toFailed(): AutocompleteFailed {
-        throw new Error('Did not fail');
-    }
+  abstract toSuccess(): S;
+
+  abstract toFailed(): F;
 }
 
-export class GetSuccess extends Success<GetSuccess, GetFailed>
-{
-    constructor(readonly address:AutocompleteAddress)
-    {
-        super();
-    }
+export class AutocompleteSuccess extends Success<AutocompleteSuccess, AutocompleteFailed> {
+  constructor(readonly suggestions: Suggestion[]) {
+    super();
+  }
 
-    toSuccess(): GetSuccess {
-        return this;
-    }
-    toFailed(): GetFailed {
-        throw new Error('Did not fail');
-    }
+  toSuccess(): AutocompleteSuccess {
+    return this;
+  }
+
+  toFailed(): AutocompleteFailed {
+    throw new Error('Did not fail');
+  }
 }
 
+export class LocationSuccess extends Success<LocationSuccess, LocationFailed> {
+  constructor(readonly suggestions: LocationSuggestion[]) {
+    super();
+  }
 
-export class AutocompleteFailed extends Result<AutocompleteSuccess,AutocompleteFailed>
-{
-    constructor(readonly status:number, readonly message:string)
-    {
-        super(false);
-    }
+  toSuccess(): LocationSuccess {
+    return this;
+  }
 
-    toSuccess(): AutocompleteSuccess {
-        throw new Error('Not a success');
-    }
-    toFailed(): AutocompleteFailed {
-        return this;
-    }
+  toFailed(): LocationFailed {
+    throw new Error('Did not fail');
+  }
 }
 
-export class GetFailed extends Result<GetSuccess,GetFailed>
-{
-    constructor(readonly status:number, readonly message:string)
-    {
-        super(false);
-    }
-
-    toSuccess(): GetSuccess {
-        throw new Error('Not a success');
-    }
-    toFailed(): GetFailed {
-        return this;
-    }
+export interface Suggestion {
+  id: string;
+  url: string;
+  address: string;
 }
 
-export class AutocompleteOptions
-{
-    all:boolean = undefined;
-    template:string = undefined;
-    top:number = undefined;
-    filter:Partial<AutocompleteFilter> = undefined;
-    fuzzy:boolean =  true;
+export class GetSuccess extends Success<GetSuccess, GetFailed> {
+  constructor(readonly address: AutocompleteAddress) {
+    super();
+  }
 
-    static Default():AutocompleteOptions
-    {
-        let options = new AutocompleteOptions();
-        options.all = true;
-        return options;
-    }
+  toSuccess(): GetSuccess {
+    return this;
+  }
+
+  toFailed(): GetFailed {
+    throw new Error('Did not fail');
+  }
 }
 
-export class TypeaheadOptions
-{
-    
-    top:number = undefined;
-    search:string[] = undefined;
-   
-    static Default():TypeaheadOptions
-    {
-        let options = new TypeaheadOptions();
-        return options;
-    }
+export class GetLocationSuccess extends Success<GetLocationSuccess, GetLocationFailed> {
+  constructor(readonly location: LocationAddress) {
+    super();
+  }
+
+  toSuccess(): GetLocationSuccess {
+    return this;
+  }
+
+  toFailed(): GetLocationFailed {
+    throw new Error('Did not fail');
+  }
 }
 
-export class AutocompleteFilter
-{
-    county:string = undefined;
-    locality:string= undefined;
-    district:string= undefined;
-    town_or_city:string=undefined;
-    postcode:string=undefined;
-    residential:boolean=undefined;
-    radius:AutocompleteFilterRadius=undefined;
+export class GetLocationFailed extends Result<GetLocationSuccess, GetLocationFailed> {
+  constructor(readonly status: number, readonly message: string) {
+    super(false);
+  }
+
+  toSuccess(): GetLocationSuccess {
+    throw new Error('Not a success');
+  }
+
+  toFailed(): GetLocationFailed {
+    return this;
+  }
 }
 
-export class AutocompleteFilterRadius
-{
-    km:number=undefined;
-    longitude:number=undefined;
-    latitude:number=undefined;
+export class AutocompleteFailed extends Result<AutocompleteSuccess, AutocompleteFailed> {
+  constructor(readonly status: number, readonly message: string) {
+    super(false);
+  }
+
+  toSuccess(): AutocompleteSuccess {
+    throw new Error('Not a success');
+  }
+
+  toFailed(): AutocompleteFailed {
+    return this;
+  }
 }
 
 
-export class Address
-{
-    constructor(
-        readonly formatted_address:string[],
-        readonly thoroughfare:string,
-        readonly building_name:string,
-        readonly sub_building_name:string,
-        readonly sub_building_number:string,
-        readonly building_number:string,
-        readonly line_1:string,
-        readonly line_2:string,
-        readonly line_3:string,
-        readonly line_4:string,
-        readonly locality:string,
-        readonly town_or_city:string,
-        readonly county:string,
-        readonly district:string,
-        readonly country:string)
-    {
+export class LocationFailed extends Result<LocationSuccess, LocationFailed> {
+  constructor(readonly status: number, readonly message: string) {
+    super(false);
+  }
 
-    }
+  toSuccess(): LocationSuccess {
+    throw new Error('Not a success');
+  }
+
+  toFailed(): LocationFailed {
+    return this;
+  }
 }
 
+export class GetFailed extends Result<GetSuccess, GetFailed> {
+  constructor(readonly status: number, readonly message: string) {
+    super(false);
+  }
 
+  toSuccess(): GetSuccess {
+    throw new Error('Not a success');
+  }
 
-export class AutocompleteAddress extends Address{
-    
-    constructor(
-        readonly postcode:string, 
-        readonly latitude:number,
-        readonly longitude:number,
-        readonly formatted_address:string[],
-        readonly thoroughfare:string,
-        readonly building_name:string,
-        readonly building_number:string,
-        readonly sub_building_name:string,
-        readonly sub_building_number:string,
-        readonly line_1:string,
-        readonly line_2:string,
-        readonly line_3:string,
-        readonly line_4:string,
-        readonly locality:string,
-        readonly town_or_city:string,
-        readonly county:string,
-        readonly district:string,
-        readonly country:string,
-        readonly residential:boolean)
-    {
-        super(formatted_address,thoroughfare,
-            building_name,building_number,
-            sub_building_name,sub_building_number,
-            line_1,line_2,line_3,line_3,line_4,
-            town_or_city,county,district,country);
-    }
+  toFailed(): GetFailed {
+    return this;
+  }
 }
 
-export class FindAddresses
-{
-    constructor(
-        readonly postcode:string, 
-        readonly latitude:number,
-        readonly longitude:number,
-        readonly addresses:Address[]){
-
-    }
+export interface AutocompleteOptions {
+  all: boolean;
+  template: string;
+  top: number;
+  filter: Partial<AutocompleteFilter>;
 }
 
-export class FindSuccess extends Success<FindSuccess,FindFailed>
-{
-    constructor(readonly addresses:FindAddresses)
-    {
-        super();
-    }
-
-    toSuccess(): FindSuccess {
-        return this;
-    }
-    toFailed(): FindFailed {
-        throw new Error('failed');
-    }
+export interface LocationOptions {
+  template: string;
+  template_outcode: string;
+  template_postcode: string;
+  top: number;
+  filter: Partial<LocationFilter>;
 }
 
-export class FindFailed extends Result<FindSuccess,FindFailed>
-{
-    constructor(readonly status:number, readonly message:string)
-    {
-        super(false);
-    }
-
-    toSuccess(): FindSuccess {
-        throw new Error('failed');
-    }
-    toFailed(): FindFailed {
-        return this;
-    }
+export interface TypeaheadOptions {
+  top: number;
+  search: string[];
 }
 
-export class TypeaheadSuccess extends Success<TypeaheadSuccess,TypeaheadFailed>
-{
-    constructor(readonly results:string[])
-    {
-        super();
-    }
-
-    toSuccess(): TypeaheadSuccess {
-        return this;
-    }
-    toFailed(): TypeaheadFailed {
-        throw new Error('failed');
-    }
+export interface AutocompleteFilterRadius {
+  km: number;
+  longitude: number;
+  latitude: number;
 }
 
-export class TypeaheadFailed extends Result<TypeaheadSuccess,TypeaheadFailed>
-{
-    constructor(readonly status:number, readonly message:string)
-    {
-        super(false);
-    }
+export interface LocationFilterRadius {
+  km: number;
+  longitude: number;
+  latitude: number;
+}
 
-    toSuccess(): TypeaheadSuccess {
-        throw new Error('failed');
-    }
-    toFailed(): TypeaheadFailed {
-        return this;
-    }
+export interface AutocompleteFilter {
+  county: string;
+  locality: string;
+  district: string;
+  town_or_city: string;
+  postcode: string;
+  residential: boolean;
+  radius: AutocompleteFilterRadius;
+}
+
+export interface LocationFilter {
+  county: string;
+  country:string,
+  town_or_city: string;
+  area:string,
+  postcode: string;
+  outcode: string,
+  radius: LocationFilterRadius;
+}
+
+export interface Address {
+  formatted_address: string[],
+  thoroughfare: string,
+  building_name: string,
+  sub_building_name: string,
+  sub_building_number: string,
+  building_number: string,
+  line_1: string,
+  line_2: string,
+  line_3: string,
+  line_4: string,
+  locality: string,
+  town_or_city: string,
+  county: string,
+  district: string,
+  country: string,
+}
+
+export interface AutocompleteAddress extends Address {
+  postcode: string,
+  latitude: number,
+  longitude: number,
+  locality: string,
+  residential: boolean,
+}
+
+export interface LocationAddress  {
+  postcode: string,
+  outcode:string,
+  county: string;
+  country:string,
+  town_or_city: string;
+  area:string,
+  latitude: number,
+  longitude: number
+}
+
+export interface FindAddresses {
+  postcode: string,
+  latitude: number,
+  longitude: number,
+  addresses: Address[],
+}
+
+export class FindSuccess extends Success<FindSuccess, FindFailed> {
+  constructor(readonly addresses: FindAddresses) {
+    super();
+  }
+
+  toSuccess(): FindSuccess {
+    return this;
+  }
+
+  toFailed(): FindFailed {
+    throw new Error('failed');
+  }
+}
+
+export class FindFailed extends Result<FindSuccess, FindFailed> {
+  constructor(readonly status: number, readonly message: string) {
+    super(false);
+  }
+
+  toSuccess(): FindSuccess {
+    throw new Error('failed');
+  }
+
+  toFailed(): FindFailed {
+    return this;
+  }
+}
+
+export class TypeaheadSuccess extends Success<TypeaheadSuccess, TypeaheadFailed> {
+  constructor(readonly results: string[]) {
+    super();
+  }
+
+  toSuccess(): TypeaheadSuccess {
+    return this;
+  }
+
+  toFailed(): TypeaheadFailed {
+    throw new Error('failed');
+  }
+}
+
+export class TypeaheadFailed extends Result<TypeaheadSuccess, TypeaheadFailed> {
+  constructor(readonly status: number, readonly message: string) {
+    super(false);
+  }
+
+  toSuccess(): TypeaheadSuccess {
+    throw new Error('failed');
+  }
+
+  toFailed(): TypeaheadFailed {
+    return this;
+  }
 }

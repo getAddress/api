@@ -1,88 +1,109 @@
-import GetAddress,{AutocompleteOptions} from "../Client"
-import "isomorphic-fetch"; 
+import GetAddress from '../Client';
+import 'isomorphic-fetch';
 
-const apiKey:string = process.env.getaddress_apikey as string;
+const apiKey: string = process.env.getaddress_apikey as string;
 
 test('autocomplete is success', async () => {
-    let getAddress = new GetAddress(apiKey);
+  const getAddress = new GetAddress(apiKey);
 
-    const options = AutocompleteOptions.Default();
-    
-    let autocompleteResult = await getAddress.autocomplete('TR19 7AA',options);
-    
-    if(!autocompleteResult.isSuccess)
-    {
-        let failed = autocompleteResult.toFailed();
-        console.log("--------------- "+ failed.message);
-    }
+  const options = {
+    all: true,
+  };
 
-    expect(autocompleteResult.isSuccess).toBe(true);
+  const autocompleteResult = await getAddress.autocomplete('TR19 7AA', options);
 
-    let success = autocompleteResult.toSuccess();
+  if (!autocompleteResult.isSuccess) {
+    const failed = autocompleteResult.toFailed();
+    console.log(`--------------- ${failed.message}`);
+  }
 
-    expect(success.suggestions.length > 0).toBe(true);
+  expect(autocompleteResult.isSuccess).toBe(true);
 
-    const id = success.suggestions[0].id;
+  const success = autocompleteResult.toSuccess();
 
-    let getResult = await getAddress.get(id);
+  expect(success.suggestions.length > 0).toBe(true);
 
-    expect(getResult.isSuccess).toBe(true);
+  const { id } = success.suggestions[0];
+
+  const getResult = await getAddress.get(id);
+
+  expect(getResult.isSuccess).toBe(true);
+});
+
+test('location is success', async () => {
+  const getAddress = new GetAddress(apiKey);
+
+  const locationResult = await getAddress.location('TR19 7AA');
+
+  if (!locationResult.isSuccess) {
+    const failed = locationResult.toFailed();
+    console.log(`--------------- ${failed.message}`);
+  }
+
+  expect(locationResult.isSuccess).toBe(true);
+
+  const success = locationResult.toSuccess();
+
+  expect(success.suggestions.length > 0).toBe(true);
+
+  const { id } = success.suggestions[0];
+
+  const getLocationResult = await getAddress.getLocation(id);
+
+  expect(getLocationResult.isSuccess).toBe(true);
 });
 
 test('autocomplete with all is success', async () => {
-    let getAddress = new GetAddress(apiKey);
+  const getAddress = new GetAddress(apiKey);
 
-    const options = {all:true};
-    
-    let autocompleteResult = await getAddress.autocomplete('KW1 4YT',options);
-    
-    if(!autocompleteResult.isSuccess)
-    {
-        let failed = autocompleteResult.toFailed();
-        console.log("--------------- "+ failed.message);
-    }
+  const options = { all: true };
 
-    expect(autocompleteResult.isSuccess).toBe(true);
+  const autocompleteResult = await getAddress.autocomplete('KW1 4YT', options);
 
-    let success = autocompleteResult.toSuccess();
+  if (!autocompleteResult.isSuccess) {
+    const failed = autocompleteResult.toFailed();
+    console.log(`--------------- ${failed.message}`);
+  }
 
-    expect(success.suggestions.length > 6).toBe(true);
+  expect(autocompleteResult.isSuccess).toBe(true);
+
+  const success = autocompleteResult.toSuccess();
+
+  expect(success.suggestions.length > 6).toBe(true);
 });
 
 test('autocomplete with residentional filter is success', async () => {
-    let getAddress = new GetAddress(apiKey);
+  const getAddress = new GetAddress(apiKey);
 
-    const options = {
-        all:true,
-        filter:{
-            residential: true
-        }
-    };
-    
-    let autocompleteResult = await getAddress.autocomplete('KW1 4YT',options);
-    
-    if(!autocompleteResult.isSuccess)
-    {
-        let failed = autocompleteResult.toFailed();
-        console.log("--------------- "+ failed.message);
-    }
+  const options = {
+    all: true,
+    filter: {
+      residential: true,
+    },
+  };
 
-    expect(autocompleteResult.isSuccess).toBe(true);
+  const autocompleteResult = await getAddress.autocomplete('KW1 4YT', options);
 
-    let success = autocompleteResult.toSuccess();
+  if (!autocompleteResult.isSuccess) {
+    const failed = autocompleteResult.toFailed();
+    console.log(`--------------- ${failed.message}`);
+  }
 
-    expect(success.suggestions.length > 0).toBe(true);
+  expect(autocompleteResult.isSuccess).toBe(true);
+
+  const success = autocompleteResult.toSuccess();
+
+  expect(success.suggestions.length > 0).toBe(true);
 });
 
 test('find is success', async () => {
-    let getAddress = new GetAddress(apiKey);
-    let result = await getAddress.find('TR19 7AA');
-    
-    if(!result.isSuccess){
-        let failed = result.toFailed();
-        console.log("--------------- "+ failed.message);
-    }
+  const getAddress = new GetAddress(apiKey);
+  const result = await getAddress.find('TR19 7AA');
 
-    expect(result.isSuccess).toBe(true);
+  if (!result.isSuccess) {
+    const failed = result.toFailed();
+    console.log(`--------------- ${failed.message}`);
+  }
+
+  expect(result.isSuccess).toBe(true);
 });
-
