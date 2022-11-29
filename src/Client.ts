@@ -5,7 +5,7 @@ import {
   AutocompleteFilter, AutocompleteFilterRadius, TypeaheadSuccess,
   TypeaheadFailed, TypeaheadOptions,LocationOptions,LocationSuccess,
   LocationFailed,LocationSuggestion,GetLocationSuccess,GetLocationFailed,
-  LocationAddress
+  LocationAddress,LocationFilter,LocationFilterRadius
 } from './Types';
 
 class Client {
@@ -332,15 +332,27 @@ class Client {
 export default Client;
 
 export {
-  Client, GetFailed, Result,
+  Client, 
+  GetFailed,
+  GetLocationFailed, 
+  Result,
   AutocompleteOptions,
+  LocationOptions,
   AutocompleteFilter,
+  LocationFilter,
   AutocompleteFilterRadius,
+  LocationFilterRadius,
   Suggestion,
+  LocationSuggestion,
   AutocompleteSuccess,
+  LocationSuccess,
   AutocompleteAddress,
+  LocationAddress,
   GetSuccess,
-  AutocompleteFailed, FindAddresses,
+  GetLocationSuccess,
+  AutocompleteFailed, 
+  LocationFailed,
+  FindAddresses,
   FindSuccess, FindFailed, TypeaheadFailed,
   TypeaheadSuccess, TypeaheadOptions,
 };
