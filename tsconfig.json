@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-      "moduleResolution": "Node",
-      "outDir": "./dist/",
-      "module": "ES6",
-      "target": "ES2015",
+      "outDir": "lib",
       "declaration": true,
       "forceConsistentCasingInFileNames": true,
       "strict": true,
-      "sourceMap": true
-  }
+      "target": "ES2015",
+      "moduleResolution": "Node"
+      
+  },
+  "include": ["src"]
 }
