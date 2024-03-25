@@ -5,26 +5,7 @@ GetAddress.io core address look-up functionality.
 npm install getaddress-api
 ```
 # Usage
-## Find
-```
-import Client from 'getaddress-api'
 
-const api = new Client("<your API key>");
-
-const findResult = await api.find("XX4 01X");
-
-if(findResult.isSuccess)
-{
-    const success = findResult.toSuccess();
-    console.log(success.addresses);
-}
-else
-{
-    const failed = findResult.toFailed();
-    console.log(failed);
-}
-
-```
 ## Autocomplete
 ```
 import Client from 'getaddress-api'

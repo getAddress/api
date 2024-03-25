@@ -155,9 +155,10 @@ class Client {
     options: Partial<AutocompleteOptions> = {},
   ): Promise<Result<AutocompleteSuccess, AutocompleteFailed>> {
     try {
+
       const combinedOptions = {
         all: true,
-        ...options,
+        ...options
       };
 
       let url = this.autocomplete_url.replace(/{query}/i, query);
