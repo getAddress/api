@@ -115,15 +115,15 @@ class Client {
 
       if (this.getLocationResponse !== undefined) {
         this.getResponse = undefined;
-        this.getAbortController.abort();
-        this.getAbortController = new AbortController();
+        this.getLocationAbortController.abort();
+        this.getLocationAbortController = new AbortController();
       }
 
       this.getResponse = await fetch(
         url,
         {
           method: 'get',
-          signal: this.getAbortController.signal,
+          signal: this.getLocationAbortController.signal,
           headers: {
             'Content-Type': 'application/json',
           },

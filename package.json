@@ -1,9 +1,9 @@
 {
   "name": "getaddress-api",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "GetAddress.io core address look-up functionality",
-  "typings": "lib/Client",
-  "main": "lib/Client",
+  "typings": "lib/Index",
+  "main": "lib/Index",
   "engines": {
     "node": ">= 13.2.0"
   },
@@ -28,8 +28,5 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "typescript": "^5.4.3"
-  },
-  "dependencies": {
-    
   }
 }
