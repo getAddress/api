@@ -208,7 +208,7 @@ class Client {
     }
   }
 
-  async get(id: string): Promise<Result<GetSuccess, GetFailed>> {
+  async get(id: string, options: Partial<AutocompleteOptions> = {}): Promise<Result<GetSuccess, GetFailed>> {
     try {
       let url = this.get_url.replace(/{id}/i, id);
 
@@ -218,6 +218,11 @@ class Client {
         } else {
           url = `${url}?api-key=${this.api_key}`;
         }
+      }
+
+      if(options.remember === false)
+      {
+        url = `${url}&remember=false`;
       }
 
       if (this.getResponse !== undefined) {

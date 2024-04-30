@@ -1,6 +1,6 @@
 {
   "name": "getaddress-api",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "GetAddress.io core address look-up functionality",
   "typings": "lib/Index",
   "main": "lib/Index",

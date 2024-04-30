@@ -156,7 +156,9 @@ export interface AutocompleteOptions {
   template: string;
   top: number;
   filter: Partial<AutocompleteFilter>;
+  remember: boolean
 }
+
 
 export interface LocationOptions {
   template: string;
