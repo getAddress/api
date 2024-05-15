@@ -1,11 +1,11 @@
 {
   "name": "getaddress-api",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "GetAddress.io core address look-up functionality",
   "typings": "lib/Index",
   "main": "lib/Index",
   "engines": {
-    "node": ">= 13.2.0"
+    "node": ">= 18.0.0"
   },
   "homepage": "https://getaddress.io",
   "repository": {

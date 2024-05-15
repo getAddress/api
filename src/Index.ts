@@ -250,6 +250,7 @@ class Client {
 
       const json: any = await this.getResponse.json();
       return new GetFailed(this.getResponse.status, json.Message);
+      
     } catch (err: unknown) {
       if (err instanceof Error) {
         return new GetFailed(401, err.message);
