@@ -6,7 +6,7 @@ import {
   TypeaheadFailed, TypeaheadOptions,LocationOptions,LocationSuccess,
   LocationFailed,LocationSuggestion,GetLocationSuccess,GetLocationFailed,
   LocationAddress,LocationFilter,LocationFilterRadius
-} from './Types';
+} from './Types.js';
 
 class Client {
   private autocompleteAbortController: AbortController;
@@ -361,5 +361,5 @@ export {
   LocationFailed,
   FindAddresses,
   FindSuccess, FindFailed, TypeaheadFailed,
-  TypeaheadSuccess, TypeaheadOptions,
+  TypeaheadSuccess, TypeaheadOptions
 };
