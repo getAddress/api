@@ -6,7 +6,8 @@
       "strict": true,
       "target": "ES2015",
       "moduleResolution": "nodenext",
-      "module": "NodeNext"
+      "module": "NodeNext",
+      "sourceMap":true
       
   },
   "include": ["src"]

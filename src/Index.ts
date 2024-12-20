@@ -183,7 +183,7 @@ class Client {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(combinedOptions),
+        body: JSON.stringify(combinedOptions)
       });
 
       if (this.autocompleteResponse.status === 200) {

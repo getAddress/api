@@ -1,4 +1,7 @@
 /* eslint-disable class-methods-use-this */
+
+import Client from "./Index.js";
+
 /* eslint-disable max-classes-per-file */
 export interface Suggestion {
   id: string;
@@ -156,7 +159,8 @@ export interface AutocompleteOptions {
   template: string;
   top: number;
   filter: Partial<AutocompleteFilter>;
-  remember: boolean
+  remember: boolean;
+  show_postcode:boolean;
 }
 
 

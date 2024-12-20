@@ -1,9 +1,10 @@
 {
   "name": "getaddress-api",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "GetAddress.io core address look-up functionality",
-  "typings": "lib/Index",
-  "main": "lib/Index",
+  "types": "lib/Index",
+  "main": "",
+  "exports": "./lib/Index.js",
   "engines": {
     "node": ">= 18.0.0"
   },
@@ -16,7 +17,7 @@
   "scripts": {
     "cleanDist": "rimraf lib/*",
     "build": "npm-run-all cleanDist compile",
-    "compile":"tsc -p .",
+    "compile": "tsc -p .",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
