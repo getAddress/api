@@ -1,6 +1,8 @@
 /* eslint-disable class-methods-use-this */
 
-import Client from "./Index.js";
+import Client from "./ApiClient.js";
+
+export {Client};
 
 /* eslint-disable max-classes-per-file */
 export interface Suggestion {
@@ -161,6 +163,12 @@ export interface AutocompleteOptions {
   filter: Partial<AutocompleteFilter>;
   remember: boolean;
   show_postcode:boolean;
+  location:Location;
+}
+
+export interface Location{
+  latitude:number;
+  longitude:number;
 }
 
 

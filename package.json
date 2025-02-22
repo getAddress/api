@@ -1,10 +1,21 @@
 {
   "name": "getaddress-api",
-  "version": "2.1.0",
+  "version": "2.3.0",
   "description": "GetAddress.io core address look-up functionality",
-  "types": "lib/Index",
+  "type": "module",
+  "types": "./dist/types.d.ts",
+  "typings": "./dist/types.d.ts",
   "main": "",
-  "exports": "./lib/Index.js",
+  "exports": {
+    "import":{
+      "types":"./dist/types.d.ts",
+      "default":"./dist/getaddress-api-client.js"
+      },
+      "require":{
+      "types":"./dist/types.d.ts",
+      "default":"./dist/getaddress-api-client.cjs"
+      }
+    },
   "engines": {
     "node": ">= 18.0.0"
   },
@@ -13,21 +24,28 @@
     "type": "git",
     "url": "https://github.com/getAddress/api"
   },
-  "type": "module",
   "scripts": {
-    "cleanDist": "rimraf lib/*",
-    "build": "npm-run-all cleanDist compile",
+    "cleanDist": "rimraf dist/*",
+    "rollup": "rollup -c",
+    "watch": "rollup -c --watch",
+    "watchTs": "tsc -p . --watch",
     "compile": "tsc -p .",
-    "prepublishOnly": "npm run build"
+    "build": "npm-run-all cleanDist compile rollup"
   },
   "keywords": [
-    "getaddress.io postcode getaddress getaddress() find autocomplete"
+    "getaddress.io postcode getaddress getaddress() address API"
   ],
-  "author": "Lee Smith",
+
+  "author": "Codeberry Limited",
   "license": "MIT",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "typescript": "^5.4.3"
+    "rollup": "^4.29.1",
+    "rollup-plugin-dts": "^6.1.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.7.2"
   }
 }

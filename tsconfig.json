@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-      "outDir": "lib",
-      "declaration": true,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "target": "ES2015",
       "moduleResolution": "nodenext",
-      "module": "NodeNext",
+      "outDir": "lib",
+      "module": "nodenext",
+      "target": "ES2015",
+      "declaration": true, 
+      "forceConsistentCasingInFileNames":  true,
+      "strict":  true,
       "sourceMap":true
-      
   },
   "include": ["src"]
 }
+

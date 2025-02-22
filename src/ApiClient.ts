@@ -2,13 +2,13 @@ import {
   GetFailed, Result, AutocompleteOptions, Suggestion,
   AutocompleteSuccess, AutocompleteAddress, GetSuccess,
   AutocompleteFailed, FindAddresses, FindSuccess, FindFailed,
-  AutocompleteFilter, AutocompleteFilterRadius, TypeaheadSuccess,
+  TypeaheadSuccess,
   TypeaheadFailed, TypeaheadOptions,LocationOptions,LocationSuccess,
   LocationFailed,LocationSuggestion,GetLocationSuccess,GetLocationFailed,
-  LocationAddress,LocationFilter,LocationFilterRadius
+  LocationAddress
 } from './Types.js';
 
-class Client {
+export default class Client {
   private autocompleteAbortController: AbortController;
 
   private getAbortController: AbortController;
@@ -114,12 +114,12 @@ class Client {
       }
 
       if (this.getLocationResponse !== undefined) {
-        this.getResponse = undefined;
+        this.getLocationResponse = undefined;
         this.getLocationAbortController.abort();
         this.getLocationAbortController = new AbortController();
       }
 
-      this.getResponse = await fetch(
+      this.getLocationResponse = await fetch(
         url,
         {
           method: 'get',
@@ -130,14 +130,14 @@ class Client {
         },
       );
 
-      if (this.getResponse.status === 200) {
-        const json: any = await this.getResponse.json();
+      if (this.getLocationResponse.status === 200) {
+        const json: any = await this.getLocationResponse.json();
         const loaction = json as LocationAddress;
         return new GetLocationSuccess(loaction);
       }
 
-      const json: any = await this.getResponse.json();
-      return new GetLocationFailed(this.getResponse.status, json.Message);
+      const json: any = await this.getLocationResponse.json();
+      return new GetLocationFailed(this.getLocationResponse.status, json.Message);
     } catch (err: unknown) {
       if (err instanceof Error) {
         return new GetLocationFailed(401, err.message);
@@ -306,7 +306,7 @@ class Client {
 
       this.typeaheadResponse = await fetch(url, {
         method: 'post',
-        signal: this.autocompleteAbortController.signal,
+        signal: this.typeaheadAbortController.signal,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -336,30 +336,5 @@ class Client {
   }
 }
 
-export default Client;
 
-export {
-  Client, 
-  GetFailed,
-  GetLocationFailed, 
-  Result,
-  AutocompleteOptions,
-  LocationOptions,
-  AutocompleteFilter,
-  LocationFilter,
-  AutocompleteFilterRadius,
-  LocationFilterRadius,
-  Suggestion,
-  LocationSuggestion,
-  AutocompleteSuccess,
-  LocationSuccess,
-  AutocompleteAddress,
-  LocationAddress,
-  GetSuccess,
-  GetLocationSuccess,
-  AutocompleteFailed, 
-  LocationFailed,
-  FindAddresses,
-  FindSuccess, FindFailed, TypeaheadFailed,
-  TypeaheadSuccess, TypeaheadOptions
-};
+
